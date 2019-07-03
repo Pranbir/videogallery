@@ -847,7 +847,20 @@ function SearchSwitch(com) {
 	$('input#switch-com').val(com);
 	//alert($('a#s-' +com + ' > i').html());
 	var $button = $('a#s-' +com + ' > i').clone();
+	
+	let btnCode = '<div id="time_rage_selector" style="float:left;"><button type="" class="btn legitRipple btn-md" style="  margin-left: -2px; height: 47px; border-radius: 0px 20px 20px px; margin-top: 3px;">	<i class="material-icons" style=" font-size: 10p;">&#xE63A;</i></button></div>';
 	$('a#switch-search').html($button);
+	console.log($button);
+	if(com == "time_range"){
+		console.log("Trigger New formula");
+		$('#time_rage_selector').show();
+		$('.searchWidget .search-target').css({"right":"150px"});
+	}
+	else{
+		$('#time_rage_selector').hide();
+		$('.searchWidget .search-target').css({"right":"75px"});
+	}
+
 }
 function iHeartThis(vid) {
     $.post(
@@ -1083,4 +1096,8 @@ function modIframeH(h){
 var str = $('#share-embed-code-small').val();                        
 str = str.replace(/height="[\s\S]*?"/, 'height="'+ h +'"');	
 $('#share-embed-code-small').val(str);
+}
+
+function showDateTimePick(){
+ $('#dateTimePickModal').modal('show');
 }

@@ -135,8 +135,23 @@ if(get_option('youtube-suggest',1) > 0) { $nav .= 'autocomplete="off"'; }
 $nav .= '> <div class="search-holder">
                     <span class="search-button">
 					<button type="submit">
-					<i class="material-icons">&#xE8B6;</i>
+						<i class="material-icons">&#xE8B6;</i>
 					</button>
+					<a onClick="showDateTimePick();" style="display:none;
+					background: none;
+					border: 0;
+					box-shadow: none;
+					outline: 0;
+					z-index: 12;
+					font-size: 24px;
+					line-height: 46px;
+					padding: 0 17px;
+					vertical-align: top;
+					color: rgba(0,0,0,0.38);
+					background-color: #FAFAFA;
+					" id="time_rage_selector" class="btn legitRipple btn-md" >
+						<i class="material-icons" style=" font-size: 10p;">&#xE05F;</i>
+					</a>
 					</span>
 					<div class="search-target">
 					<a id="switch-search" class="dropdown-toggle"  data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button"><i class="icon material-icons">&#xE63A;</i></a>
@@ -146,11 +161,13 @@ $nav .= '> <div class="search-holder">
 					
 					<li role="presentation"><a id="s-channel" href="javascript:SearchSwitch(\'channel\')"><i class="icon material-icons">&#xE55A;</i>'._lang("Location").'</a></li>
 					
-					<li role="presentation"><a id="lo-video" href="javascript:SearchSwitch(\'video\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Load Number").'</a></li>
+					<li role="presentation"><a id="s-load" href="javascript:SearchSwitch(\'load\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Load Number").'</a></li>
 					
-					<li role="presentation"><a id="it-video" href="javascript:SearchSwitch(\'video\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Item Number").'</a></li>
+					<li role="presentation"><a id="s-item" href="javascript:SearchSwitch(\'item\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Item Number").'</a></li>
 					
-					<li role="presentation"><a id="s-playlist" href="javascript:SearchSwitch(\'playlist\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Comment").'</a></li>
+					<li role="presentation"><a id="s-comment" href="javascript:SearchSwitch(\'comment\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Comment").'</a></li>
+					
+					<li role="presentation"><a id="s-time_range" href="javascript:SearchSwitch(\'time_range\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Time range").'</a></li>
 					</ul>
 					</div>
                     <div class="form-control-wrap">
@@ -220,5 +237,25 @@ $nav .= '
 </div>
 </div>
 ';
+
+$nav.= '<div id="dateTimePickModal" class="modal fade" role="dialog" style="top: 50px;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Choose date and time</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
 return $nav;
 }
