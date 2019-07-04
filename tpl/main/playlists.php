@@ -1,15 +1,15 @@
 <?php the_sidebar(); ?>
 <div class="row">
-<div class="col-md-10 nomargin">
+<div class="col-md-12 nomargin">
   <div class="row">
- <div id="videolist-content" class="oboxed col-md-8"> 
+ <div id="videolist-content" class="oboxed col-md-12"> 
 <?php echo _ad('0','playlists-top');
 if(!isset($st)){ $st = ''; }
-if(isset($heading) && !empty($heading)) { echo '<h1 class="loop-heading"><span>'._html($heading).'</span>'.$st.'</h1>';}
+if(isset($heading) && !empty($heading)) { echo '<h1 class="loop-heading"><span>'._html($pl_heading).'</span>'.$st.'</h1>';}
 if(isset($heading_meta) && !empty($heading_meta)) { echo $heading_meta;}
 if ($playlists) {
 
-echo '<div id="SearchResults" class="loop-content phpvibe-video-list ">'; 
+echo '<div id="SearchResults" class="loop-content phpvibe-video-list" style="display:inline-flex!important">'; 
 foreach ($playlists as $pl) {
 			$title = _html(_cut($pl->title, 170));
 			$full_title = _html(str_replace("\"", "",$pl->title));			
@@ -42,7 +42,7 @@ foreach ($playlists as $pl) {
 			';
 			if(isset($entries[$pl->id])) {$plays = intval($entries[$pl->id]); }
 echo '
-<div id="video-'.$pl->id.'" class="video">
+<div id="video-'.$pl->id.'" class="video" style="width:50%">
 <div class="video-inner">
 <div class="video-thumb">
 		<a class="clip-link" data-id="'.$pl->id.'" title="'.$full_title.'" href="'.$ol.'">

@@ -39,7 +39,7 @@ if ($result) {
 	
 	$watched = (in_array($related->vid,$seenvids)) ? '<span class="vSeen">'._lang("Watched").'</span>' : '';
 	$watchedcls = (in_array($related->vid,$seenvids)) ? 'beenSeen' : '';
-	if(($fsc < 2 ) && !in_array($related->vid,$seenvids)) {
+	if(($fsc < 2 ) && !in_array($related->vid)) {
 	$fsc++; /* Count only not seened */
 	$firstseen = true;
 	$watchedcls = 'AutoplHold';
