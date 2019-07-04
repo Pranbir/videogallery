@@ -159,7 +159,7 @@ $nav .= '> <div class="search-holder">
 					<ul class="dropdown-menu dropdown-left bullet" role="menu">
 					<li role="presentation"><a id="s-video" href="javascript:SearchSwitch(\'video\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Any").'</a></li>
 					
-					<li role="presentation"><a id="s-channel" href="javascript:SearchSwitch(\'channel\')"><i class="icon material-icons">&#xE55A;</i>'._lang("Location").'</a></li>
+					<li role="presentation"><a id="s-location" href="javascript:SearchSwitch(\'location\')"><i class="icon material-icons">&#xE55A;</i>'._lang("Location").'</a></li>
 					
 					<li role="presentation"><a id="s-load" href="javascript:SearchSwitch(\'load\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Load Number").'</a></li>
 					
@@ -247,11 +247,17 @@ $nav.= '<div id="dateTimePickModal" class="modal fade" role="dialog" style="top:
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Choose date and time</h4>
       </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
+      <div class="modal-body" style="background: #15254c;">
+        <div class="form-group row">
+			<label class="col-md-6 col-xs-12">Start Date : <input style="background: inherit;" id="dateTimePick_startDate" type="date" placeholder="Date" class="form-control"></label>
+			<label class="col-md-6 col-xs-12"> Start time : <input style="background: inherit;" id="dateTimePick_startTime" type="time" class="form-control"></label>
+			<label class="col-md-6 col-xs-12">End Date : <input style="background: inherit;" id="dateTimePick_endDate" type="date" placeholder="Date" class="form-control"></label>
+			<label class="col-md-6 col-xs-12"> End time : <input style="background: inherit;" id="dateTimePick_endTime" type="time" class="form-control"></label>
+		</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-success legitRipple" onClick="generateDateTimeSearchValue();" >Submit</button>
+        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 

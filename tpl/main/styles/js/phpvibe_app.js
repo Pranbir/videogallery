@@ -1101,3 +1101,27 @@ $('#share-embed-code-small').val(str);
 function showDateTimePick(){
  $('#dateTimePickModal').modal('show');
 }
+function generateDateTimeSearchValue(){
+	let startDateVal = $('#dateTimePick_startDate').val();
+	let endDateVal = $('#dateTimePick_endDate').val();
+	let startTimeVal = $('#dateTimePick_startTime').val();
+	let endTimeVal = $('#dateTimePick_endTime').val();
+	let output="";
+	//Validation
+	
+	if(startDateVal == "" || endDateVal == "" || startTimeVal == "" || endTimeVal == ""){
+		alert("All Fields are mandatory.");
+		return false;
+	}
+	else{
+		output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00";
+		$("#searchform > div > div.form-control-wrap > input").val(output);
+		$('#dateTimePick_date').val("");
+		$('#dateTimePick_startTime').val("");
+		$('#dateTimePick_endTime').val("");
+		$('#dateTimePickModal').modal('hide');
+		
+	}
+	
+	
+}
