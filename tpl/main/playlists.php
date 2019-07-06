@@ -9,7 +9,7 @@ if(isset($heading) && !empty($heading)) { echo '<h1 class="loop-heading"><span>'
 if(isset($heading_meta) && !empty($heading_meta)) { echo $heading_meta;}
 if ($playlists) {
 
-echo '<div id="SearchResults" class="loop-content phpvibe-video-list" style="display:inline-flex!important">'; 
+echo '<div id="SearchResults" class="loop-content phpvibe-video-list" >'; 
 foreach ($playlists as $pl) {
 			$title = _html(_cut($pl->title, 170));
 			$full_title = _html(str_replace("\"", "",$pl->title));			

@@ -1,7 +1,7 @@
 <div class="row">
 <div class="panel panel-bordered col-md-12 col-xs-12">
 <div class="panel-heading">
-<h3 class="panel-title">PHPVibe's integrity check</h3>
+<h3 class="panel-title">Integrity check</h3>
 </div>
 <div class="panel-body nopad">
 <ul class="list-group iconed-xlist">

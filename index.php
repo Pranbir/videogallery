@@ -11,7 +11,7 @@ if( !defined( 'ABSPATH' ) )
 if(!is_readable('vibe_config.php') || is_readable('hold')){
 echo '<div style="padding:10% 20%; display:block; color:#fff; background:#ff604f"><h1>Hold on!</h1>';
 echo '<h3> The configuration file needs editing OR/AND the "hold" file exists on your server! </h3><br />';
-echo '<a href="setup/index.php"><h2>RUN PHPVibe\'s SETUP</h2></a></strong>';
+echo '<a href="setup/index.php"><h2>RUN  SETUP</h2></a></strong>';
 echo '</div>';
 die();
 }
