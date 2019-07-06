@@ -1,10 +1,16 @@
 <?php /* PHPVibe PRO v6's header */
-//####################
-// if(!is_user()){
-  // redirect(site_url().'login/');	  
-  // }
-//###################  
+####################
+if(!is_user()){
+	$page_url = $_SERVER['REQUEST_URI'];
+	//echo "<h2>".$_SERVER['REQUEST_URI']."</h2>";
+  //redirect(site_url().'login/');	  
+	if (strpos($page_url, 'login') == false) {
+		redirect(site_url().'login/');
+	}
+  }
+###################  
   
+//echo "<h2>".$_SERVER['REQUEST_URI']."</h2>";
 register_style('phpvibe');
 if(!is_home() && !is_video()) {
 register_style('more');
@@ -253,6 +259,7 @@ $nav.= '<div id="dateTimePickModal" class="modal fade" role="dialog" style="top:
 			<label class="col-md-6 col-xs-12"> Start time : <input style="background: inherit;" id="dateTimePick_startTime" type="time" class="form-control"></label>
 			<label class="col-md-6 col-xs-12">End Date : <input style="background: inherit;" id="dateTimePick_endDate" type="date" placeholder="Date" class="form-control"></label>
 			<label class="col-md-6 col-xs-12"> End time : <input style="background: inherit;" id="dateTimePick_endTime" type="time" class="form-control"></label>
+			<label class="col-md-6 col-xs-12"> Location : <input style="background: inherit;" id="dateTimePick_location" type="text" class="form-control"></label>
 		</div>
       </div>
       <div class="modal-footer">

@@ -294,7 +294,7 @@
 						  <li>
 						  <div id ="media-description" data-small="<?php echo _lang("show more");?>" data-big=" <?php echo _lang("show less");?>">
                             <?php echo makeLn(_html($video->description));?>
-							<p style="font-weight:500; color:#333">
+							<p style="font-weight:500; color:#333" class="hideTheElement">
 							 <?php echo _lang("Category :");?> <a href="<?php echo channel_url($video->category,$video->channel_name);?>" title="<?php echo _html($video->channel_name);?>">
                                 <?php echo _html($video->channel_name);?>
                             </a>

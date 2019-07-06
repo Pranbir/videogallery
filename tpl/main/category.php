@@ -64,6 +64,6 @@ include_once(TPL.'/images-loop.php');
 }
 ?>
 </div>
-<div class="load-cats" data-type="<?php  if($typeofC < 2) {echo '1';} else { echo $typeofC;} ?>">
+<div class="load-cats hideTheElement" data-type="<?php  if($typeofC < 2) {echo '1';} else { echo $typeofC;} ?>">
 &nbsp;
 </div>

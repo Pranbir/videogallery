@@ -33,6 +33,6 @@ include_once(TPL.'/music-loop.php');
 echo _ad('0','music-list-bottom');
 ?>
 </div>
-<div class="load-cats" data-type="2">
+<div class="load-cats hideTheElement" data-type="2">
 &nbsp;
 </div>

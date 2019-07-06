@@ -69,7 +69,7 @@ if(!isset($comsNav)) {
 //get comments from database
 $totals = $db->get_row("SELECT count(*) as nr, count(case when reply=0 then 1 else NULL end) as mains from ".DB_PREFIX."em_comments WHERE object_id =  '".$object_id."'");
 $totals->replies = $totals->nr - $totals->mains;
-$html     = '<ul id="emContent_'.$object_id.'-0" class="comments full">
+$html     = '<ul id="emContent_'.$object_id.'-0" class="comments full hideTheElement">
 <div class="cctotal">'.$totals->mains.' '._lang("Comments").' '._lang("and").'  '.$totals->replies.' '._lang("replies").'</div>
 ';
 

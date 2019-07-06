@@ -48,8 +48,8 @@ $a->set_values($count->nr);
 <div class="block full mar20_top mar10_bottom">
  <ul class="nav nav-tabs nav-tabs-line">
  <li class="disabled" role="presentation"><a href="javascript:void(0)">#<?php echo $key; ?></a></li>
-                    <li class="active"><a href="<?php echo $ps;?>"> Videos & Music</a></li>
-                   <li><a href="<?php echo str_replace('sk=search-videos','sk=search-images',canonical());?>">Images</a></li>
+                    <li class="active"><a href="<?php echo $ps;?>"> Videos </a></li>
+<!--                   <li><a href="<?php echo str_replace('sk=search-videos','sk=search-images',canonical());?>">Images</a></li> -->
 				   </ul>
 
 </div>

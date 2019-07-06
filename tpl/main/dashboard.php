@@ -120,9 +120,9 @@ the_sidebar(); ?>
 		if($playlist == history_playlist()) {
 			echo '<h2>'._lang("Watch it again").'</h2>';
 		} elseif ($playlist == likes_playlist()) {
-			echo '<h2>'._lang("You've enjoyed this").'</h2>';			
+			echo '<h2 style="display:none">'._lang("You've enjoyed this").'</h2>';			
 		} else {
-		echo '<h2>'._lang("You wanted to check this").'</h2>';	
+		echo '<h2 style="display:none">'._lang("You wanted to check this").'</h2>';	
 		}
 		$options = DB_PREFIX."videos.id,".DB_PREFIX."videos.media,".DB_PREFIX."videos.title,".DB_PREFIX."videos.user_id,".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.views,".DB_PREFIX."videos.liked,".DB_PREFIX."videos.duration,".DB_PREFIX."videos.nsfw";
 		$vq = "SELECT ".DB_PREFIX."videos.id, ".DB_PREFIX."videos.title, ".DB_PREFIX."videos.user_id, ".DB_PREFIX."videos.thumb, ".DB_PREFIX."videos.views, ".DB_PREFIX."videos.liked, ".DB_PREFIX."videos.duration, ".DB_PREFIX."videos.nsfw, ".DB_PREFIX."users.group_id, ".DB_PREFIX."users.name AS owner
@@ -131,7 +131,8 @@ the_sidebar(); ?>
 		LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id
 		WHERE ".DB_PREFIX."playlist_data.playlist =  '".$playlist."'
 		ORDER BY ".DB_PREFIX."playlist_data.id DESC ".this_offset(bpp());
-		include(TPL.'/video-carousel.php');
+		
+		if($playlist == history_playlist()){include(TPL.'/video-carousel.php');}
 	}
 	
 	echo '<div class="block full text-center mtop20 mbot10">
@@ -149,9 +150,9 @@ the_sidebar(); ?>
 	<ul class="nav nav-tabs nav-tabs-line">
 		<li class=""><a href="<?php echo site_url(); ?>dashboard/"><i class="icon icon-hashtag"></i><?php echo _lang("Overview");?></a></li>
 		<li class=""><a href="<?php echo site_url(); ?>dashboard/?sk=activity"><i class="material-icons">&#xE7F7;</i><?php echo _lang("Activities");?></a></li>
-		<li class=""><a href="<?php echo site_url(); ?>dashboard/?sk=edit"><i class="icon icon-cogs"></i><?php echo _lang("Channel Settings");?></a></li>
+		<li class=""><a href="<?php echo site_url(); ?>dashboard/?sk=edit"><i class="icon icon-cogs"></i><?php echo _lang("Profile Settings");?></a></li>
 		<li class=""><a href="<?php echo site_url().me; ?>"><i class="icon icon-film"></i><?php echo _lang("Videos");?></a></li>
-		<li class=""><a href="<?php echo site_url().me; ?>?sk=playlists"><i class="icon icon-bars"></i><?php echo _lang("Playlists");?></a></li>
+		<!--<li class=""><a href="<?php echo site_url().me; ?>?sk=playlists"><i class="icon icon-bars"></i><?php echo _lang("Playlists");?></a></li> -->
 	</ul>
 </div>
 <?php

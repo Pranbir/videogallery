@@ -1,6 +1,6 @@
 <?php the_sidebar(); 
 /* Most liked , Most viewed time sorting */
-$st = '
+$st = '<!--
 <div class="btn-group pull-right">
        <a data-toggle="dropdown" class="btn dropdown-toogle text-uppercase"><i class="material-icons">&#xE152;</i> '._lang("Refine").'</a>
 			<ul class="dropdown-menu dropdown-menu-right bullet">
@@ -10,7 +10,7 @@ $st = '
 			<li class="divider" role="presentation"></li>
 			<li title="'._lang("All the time").'"><a href="'.site_url().show.url_split.str_replace(array(" "),array("-"),$key).'"><i class="icon material-icons">&#xE922;</i>'._lang("Always").'</a></li>
 		</ul>
-		</div>
+		</div> -->
 ';
 
 ?>

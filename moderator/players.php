@@ -63,7 +63,7 @@ $all_options = get_all_options();
 	<span class="help-block" id="limit-text">Which player should be loaded for linked mobile supported files (.mp4, .mp3, etc)? JwPlayer is loaded for the rest.</span>
 	</div>
 	</div>
-	<div class="form-group form-material">
+	<!--<div class="form-group form-material">
 	<label class="control-label"><i class="icon-youtube"></i>Youtube videos</label>
 	<div class="controls">
 	<label class="radio inline"><input type="radio" name="youtube-player" class="styled" value="2" <?php if(get_option('youtube-player') == 2 ) { echo "checked"; } ?>>Use JwPlayer 7</label>
@@ -72,7 +72,7 @@ $all_options = get_all_options();
 
 	<span class="help-block" id="limit-text">Which player do you wish to play Youtube videos in?</span>
 	</div>
-	</div>
+	</div> -->
 	<div class="form-group form-material">
 <label class="control-label"><i class="icon-fast-forward"></i>Video page settings</label>
  <div class="controls">

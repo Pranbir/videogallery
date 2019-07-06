@@ -605,25 +605,30 @@ echo '<div class="btn-group">';
 if (!is_user()) {
 //It's guest
 $btnc = "btn btn-labled social-google-plus subscriber";
-echo '<a class="'.$btnc.'" href="javascript:showLogin()"><i class="icon icon-plus"></i>'._lang('Subscribe').' '.$ktool.'</a>';
+//echo '<a class="'.$btnc.' hideTheElement" href="javascript:showLogin()"><i class="icon icon-plus"></i>'._lang('Subscribe').' '.$ktool.'</a>';
 } elseif ($user <> user_id()) {
 //If it's not you
 $check = $db->get_row("SELECT count(*) as nr from ".DB_PREFIX."users_friends where uid ='".$user."' and fid='".user_id()."'");
 if($check->nr < 1) {
 //You're not subscribed
-$btnc = "btn btn-labled social-google-plus subscriber";
-echo '<a id="subscribe-'.$user.'" data-next="'._lang("subscribed").'" class="'.$btnc.' pv_tip" href="javascript:Subscribe('.$user.', 1)" title="'._lang('Click to add a subscription').'">'._lang('Subscribe').' '.$ktool.'</a>';
+$btnc = "btn btn-primary ";
+//echo '<a id="subscribe-'.$user.'" data-next="'._lang("subscribed").'" class="'.$btnc.' pv_tip" href="javascript:Subscribe('.$user.', 1)" title="'._lang('Click to add a subscription').'">'._lang('Subscribe').' '.$ktool.'</a>';
+echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Download media').'</a>';
 } else {
 //You are, but can unsubscribe
-$btnc = "btn btn-default subscriber";
-echo '<a id="subscribe-'.$user.'" data-next="'._lang("unsubscribed").'" class="'.$btnc.' pv_tip" href="javascript:Subscribe('.$user.', 3)" title="'._lang('Click to remove subscription').'">'._lang('Subscribed').' '.$ktool.'</a>';
+//$btnc = "btn btn-default subscriber";
+$btnc = "btn btn-primary";
+//echo '<a id="subscribe-'.$user.'" data-next="'._lang("unsubscribed").'" class="'.$btnc.' pv_tip" href="javascript:Subscribe('.$user.', 3)" title="'._lang('Click to remove subscription').'">'._lang('Subscribed').' '.$ktool.'</a>';
+echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Download media').'</a>';
 }
 } else {
 	
 if(is_video()) {
 global $video;
-$btnc = "btn btn-default subscriber";
-echo '<a target="_blank" href="'.site_url().me.'?sk=edit-video&vid='.$video->id.'" class="'.$btnc.'"><i class="icon icon-cogs"></i>'._lang('Edit media').'</a>';
+//$btnc = "btn btn-default subscriber";
+$btnc = "btn btn-primary";
+//echo '<a target="_blank" href="'.site_url().me.'?sk=edit-video&vid='.$video->id.'" class="'.$btnc.'"><i class="icon icon-cogs"></i>'._lang('Edit media').'</a>';
+echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Download media').'</a>';
 }elseif(is_picture()) {
 global $image;
 $btnc = "btn btn-default subscriber";

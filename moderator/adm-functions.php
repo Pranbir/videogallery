@@ -15,7 +15,7 @@ return '<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PHPVibe Lite - Administration</title>
+    <title> Administration</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="PHPVibe.com">
@@ -98,12 +98,12 @@ $head .=  '<div id="header">
 	<div class="quickj" style="display:inline-block; position:relative; margin:8px 0 0 15px;">	
 	<a class="btn btn-raised btn-primary dropdown-toggle"  data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button">Quick Jump <i class="material-icons">&#xE5CF;</i></a>
 	<ul class="dropdown-menu bullet" role="menu">
-	<li><a href="'.admin_url('yt').'"><i class="icon material-icons">&#xE8FA;</i>Youtube Importer</a></li>
+<!--	<li><a href="'.admin_url('yt').'"><i class="icon material-icons">&#xE8FA;</i>Youtube Importer</a></li> -->
 	<li> <a  href="'.admin_url('videos').'"><i class="icon material-icons">&#xE04A;</i>Video Library</a></li>
     <li><a href="'.admin_url('users').'"><i class="icon material-icons">&#xE87C;</i>Users</a>	
-    <li><a href="'.admin_url('posts').'"><i class="icon material-icons">&#xE06F;</i>Articles</a> 
+<!--    <li><a href="'.admin_url('posts').'"><i class="icon material-icons">&#xE06F;</i>Articles</a> 
 	<li><a href="'.admin_url('reports').'"><i class="icon material-icons">&#xE87F;</i> Reports</a>
-	<li><a href="'.admin_url('plugins').'"><i class="icon material-icons">&#xE5C3;</i> Plugins</a></li>
+	<li><a href="'.admin_url('plugins').'"><i class="icon material-icons">&#xE5C3;</i> Plugins</a></li>-->
 	<li><a href="'.admin_url('setts').'"><i class="icon material-icons">&#xE8B8;</i> Settings</a>
            
     </ul>
@@ -172,16 +172,15 @@ $sb = '
                   
                     <ul>
                      <li> <a  href="'.admin_url('videos').'"><i class="icon-play-circle"></i>Videos</a></li>
-                 <li><a href="'.admin_url('playlists').'"><i class="material-icons">&#xE05C;</i> Playlists</a>
-				 <li><a href="'.admin_url('channels').'"><i class="material-icons">&#xE065;</i>Categories</a>
-                      <li><a href="'.admin_url('create-channel').'"><i class="material-icons">&#xE03B;</i>New category</a>
-					  <li><a href="'.admin_url('comments').'"><i class="material-icons">&#xE0B9;</i> Comments</a>
-                  </li>
+                 <!-- <li><a href="'.admin_url('playlists').'"><i class="material-icons">&#xE05C;</i> Playlists</a></li> 
+				 <li><a href="'.admin_url('channels').'"><i class="material-icons">&#xE065;</i>Categories</a></li>
+                      <li><a href="'.admin_url('create-channel').'"><i class="material-icons">&#xE03B;</i>New category</a></li>
+					  <li><a href="'.admin_url('comments').'"><i class="material-icons">&#xE0B9;</i> Comments</a></li> -->
 					<li class="nav-split">-</li>  
 					<li> <a  href="'.admin_url('unvideos').'"><i class="material-icons">&#xE92B;</i>Unpublished Videos</a></li>
 					</ul>
                   </li>
-                <li class="LiHead">
+                <!--<li class="LiHead">
                     <a href="#"><i class="material-icons">&#xE62E;</i> Add Video</a>
                     <ul>
 					'.apply_filters("pre-importers_menu",false).'
@@ -192,7 +191,7 @@ $sb = '
                     <li><a href="'.admin_url('crons').'"><i class="icon-retweet"></i> Scheduled tasks</a></li>
       
                     </ul>
-                  </li>
+                  </li> -->
                                
                '.apply_filters("midd_menu",false).'
                <li class="LiHead">
@@ -206,7 +205,7 @@ $sb = '
                     <li><a href="'.admin_url('users').'&sort=innactive"><i class="icon-list-alt"></i>Innactive</a>             
                    </ul>
                   </li>
-                <li>
+               <!-- <li>
                     <a href="#"><i class="icon-newspaper-o"></i> Blog</a>
                     <ul>
                     <li><a href="'.admin_url('posts').'"><i class="icon-newspaper-o"></i> All Articles</a> 
@@ -215,7 +214,7 @@ $sb = '
 					<li><a href="'.admin_url('create-pch').'"><i class="icon-plus"></i>New Category</a>					         
                  
 				   </ul>
-                  </li>
+                  </li> -->
 				  <li>
                     <a href="#"><i class="icon-file-word-o"></i> Pages</a>
                     <ul>			  
@@ -224,10 +223,10 @@ $sb = '
                  
 				   </ul>
                   </li>
-                    <li class="LiHead"><a href="'.admin_url('plugins').'"><i class="material-icons">&#xE5C3;</i> Plugins</a></li>
+                  <!--  <li class="LiHead"><a href="'.admin_url('plugins').'"><i class="material-icons">&#xE5C3;</i> Plugins</a></li> -->
 					 <li><a href="'.admin_url('langs').'"><i class="material-icons">&#xE894;</i> Languages</a></li>
 
-				<li class="LiHead">
+				<!--<li class="LiHead">
                     <a  href="#"><i class="material-icons">&#xE1AB;</i> Advertising</a>
                   <ul>
 					<li><a href="'.admin_url('videoads').'"><i class="icon-play-circle"></i>Player Overlays</a>
@@ -236,9 +235,9 @@ $sb = '
 				  
                      		'.apply_filters('filter-ads-menu',false).'		  
                    </ul>
-                  </li>
+                  </li> 
                 <li><a href="'.admin_url('reports').'"><i class="material-icons">&#xE87F;</i> Reports</a>
-                  </li>               
+                  </li> -->              
 				
 
 				'.apply_filters("end_menu",false).'
@@ -264,7 +263,7 @@ return $tools.'
 <li><a href="'.admin_url('clean-cache').'"><i class="icon-trash"></i>Empty cache</a></li>
 <li><a href="'.admin_url('integrity').'"><i class="material-icons">&#xE1C3;</i>Folder integrity check</a></li>
 <li><a href="'.admin_url('options').'"><i class="icon-list-alt"></i>Current Options </a></li>
-<li><a target="_blank" href="'.strrev('moc.ebivphp//:ptth').'"><i class="icon-external-link"></i>'.strrev('ebivphp').'</a></li>                  
+<!--<li><a target="_blank" href="'.strrev('moc.ebivphp//:ptth').'"><i class="icon-external-link"></i>'.strrev('ebivphp').'</a></li>     -->              
 ';
 }
 add_filter('filter-tools-menu','support_links');
@@ -349,8 +348,10 @@ echo '<div class="msg-warning">User with id #'.$id.' does not exist.</div>';
 }
 }
 function acjs(){
-$txt = '>p/<.>a/< etiL ebiVPHP>"SMC oediV ebiVphp"=eltit "knalb_"=tegrat "moc.ebivphp.www//:sptth"=ferh "wollofon"=ler a< yb derewoP>";xp01:pot-gniddap ;kcolb:yalpsid"=elyts p<';
-echo strrev($txt);
+	$txt = '<p style="display:block; padding-top:10px;">Powered by <a rel="nofollow" href="http://www.instadatasystems.com" target="_blank" title="InstaData Systems">InstaData Systems </a>.</p>';
+//$txt = '>p/<.>a/< etiL ebiVPHP>"SMC oediV ebiVphp"=eltit "knalb_"=tegrat "moc.ebivphp.www//:sptth"=ferh "wollofon"=ler a< yb derewoP>";xp01:pot-gniddap ;kcolb:yalpsid"=elyts p<';
+echo $txt;
+//echo strrev($txt);
 }
 function delete_cron($id) {
 global $db;

@@ -7,8 +7,8 @@ role="tab"><?php echo _lang("Change Avatar");?></a></li>
 role="tab"><?php echo _lang("Change cover");?></a></li>
 <li role="presentation"><a data-toggle="tab" href="#textTab" aria-controls="textTab"
 role="tab"><?php echo _lang("Details");?></a></a></li>
-<li role="presentation"><a data-toggle="tab" href="#socialTab" aria-controls="socialTab"
-role="tab"><?php echo _lang("Social Links");?></a></li>
+<!--<li role="presentation"><a data-toggle="tab" href="#socialTab" aria-controls="socialTab"
+role="tab"><?php echo _lang("Social Links");?></a></li> -->
 <li role="presentation"><a data-toggle="tab" href="#passTab" aria-controls="passTab"
 role="tab"><?php echo _lang("Password");?></a></li>
 </ul>
@@ -69,7 +69,7 @@ role="tab"><?php echo _lang("Password");?></a></li>
 <input type="hidden" name="changeuser" class="hide" value="1" />
 <div class="form-group form-material floating">
 <input type="text" name="name" class="form-control" name="inputFloatingText" value="<?php echo user_name();?>" />
-<label class="floating-label"><?php echo _lang("Channel Name"); ?></label>
+<label class="floating-label"><?php echo _lang("User Name"); ?></label>
 </div>
 <div class="form-group form-material floating">
 <input type="text" name="city" class="form-control" value="<?php echo _html($profile->local);?>" />
@@ -81,7 +81,7 @@ role="tab"><?php echo _lang("Password");?></a></li>
 </div>
 <div class="form-group form-material floating">
 <textarea class="form-control" rows="3" name="bio"><?php echo _html($profile->bio); ?></textarea>
-<label class="floating-label"><?php echo _lang("Channel about"); ?></label>
+<label class="floating-label"><?php echo _lang("About"); ?></label>
 </div>
 <div class="btn-group" data-toggle="buttons" role="group">
 <label class="btn btn-outline btn-primary <?php if($profile->gender < 2) { ?>active<?php } ?>">

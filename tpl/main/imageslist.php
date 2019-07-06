@@ -37,6 +37,6 @@ include_once(TPL.'/images-loop.php');
 ?>
 
 </div>
-<div class="load-cats" data-type="3">
+<div class="load-cats hideTheElement" data-type="3">
 &nbsp;
 </div>

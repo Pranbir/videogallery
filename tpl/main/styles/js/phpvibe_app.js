@@ -855,6 +855,7 @@ function SearchSwitch(com) {
 		console.log("Trigger New formula");
 		$('#time_rage_selector').show();
 		$('.searchWidget .search-target').css({"right":"150px"});
+		$('#dateTimePickModal').modal('show');
 	}
 	else{
 		$('#time_rage_selector').hide();
@@ -1110,18 +1111,83 @@ function generateDateTimeSearchValue(){
 	//Validation
 	
 	if(startDateVal == "" || endDateVal == "" || startTimeVal == "" || endTimeVal == ""){
-		alert("All Fields are mandatory.");
+		alert("Start Date,Start time,End Date, End time fields are mandatory.");
 		return false;
 	}
 	else{
+		if($('#dateTimePick_location').val().trim() != ""){
+			
+		output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimePick_location').val().trim();
+		$("#searchform > div > div.form-control-wrap > input").val(output);
+		SearchSwitch('time_range_loc')
+		$('#searchform').submit();
+		}
+		else{
 		output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00";
 		$("#searchform > div > div.form-control-wrap > input").val(output);
+		$('#searchform').submit();
 		$('#dateTimePick_date').val("");
 		$('#dateTimePick_startTime').val("");
 		$('#dateTimePick_endTime').val("");
 		$('#dateTimePickModal').modal('hide');
+		}
 		
 	}
 	
-	
+}
+
+
+
+//#############TEST CODE
+/* Helper function */
+function download_file(fileURL, fileName) {
+    // for non-IE
+    if (!window.ActiveXObject) {
+        var save = document.createElement('a');
+        save.href = fileURL;
+        save.target = '_blank';
+        var filename = fileURL.substring(fileURL.lastIndexOf('/')+1);
+        save.download = fileName || filename;
+	       if ( navigator.userAgent.toLowerCase().match(/(ipad|iphone|safari)/) && navigator.userAgent.search("Chrome") < 0) {
+				document.location = save.href; 
+// window event not working here
+			}else{
+		        var evt = new MouseEvent('click', {
+		            'view': window,
+		            'bubbles': true,
+		            'cancelable': false
+		        });
+		        save.dispatchEvent(evt);
+		        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+			}	
+    }
+
+    // for IE < 11
+    else if ( !! window.ActiveXObject && document.execCommand)     {
+        var _window = window.open(fileURL, '_blank');
+        _window.document.close();
+        _window.document.execCommand('SaveAs', true, fileName || fileURL)
+        _window.close();
+    }
+}
+//TEST CODE END
+
+function downloadVideo(){
+	let vidLink;
+	if($('#jp_video_0').length == 1) {		
+		vidLink = $('#jp_video_0').attr('src');
+		download_file(vidLink, "Video")
+		//alert("No video found in page.");
+	}
+	else if ($("#video-setup > div.jw-media.jw-reset > video").length == 1){
+		vidLink = $("#video-setup > div.jw-media.jw-reset > video").attr('src');
+		download_file(vidLink, "Video")
+	}
+	else{
+		alert("No video found in page.");
+		//let vidLink = $('#jp_video_0').attr('src');
+		//download_file(vidLink, "Video")
+		//window.open(vidLink, '_blank');
+		
+	}
 }

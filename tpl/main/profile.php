@@ -21,8 +21,10 @@ $pcover = (not_empty($profile->cover)) ? thumb_fix($profile->cover) : tpl().'ima
 <div class="cute">				
 <h1><?php echo _html($profile->name);  ?>
 <div class="btn-group">
-<?php subscribe_box($profile->id); ?>	
-<a href="<?php echo site_url();?>msg/<?php echo $profile->id;?>/" class="btn btn-primary tipS mleft20" title="<?php echo _lang("Message"). ' '._html($profile->name); ?>"><i class="icon-envelope"></i> <?php echo _lang("Message");?></a>
+
+<?php //subscribe_box($profile->id); ?>	
+<!--<a href="<?php echo site_url();?>msg/<?php echo $profile->id;?>/" class="btn btn-primary tipS mleft20" title="<?php echo _lang("Message"). ' '._html($profile->name); ?>"><i class="icon-envelope"></i> <?php echo _lang("Message");?></a> -->
+<a href="<?php echo site_url()."dashboard/";?>" class="btn btn-primary tipS mleft20" title="<?php echo _lang("Setting"). ' '._html($profile->name); ?>"> <?php echo _lang("Setting");?></a>
 </div>
 
 </h1>
@@ -58,9 +60,9 @@ $pcover = (not_empty($profile->cover)) ? thumb_fix($profile->cover) : tpl().'ima
 </div>			
 <nav id="profile-nav" class="red-nav">
   <ul>
-    <li class="<?php echo aTab("profile");?>"><a href="<?php echo $canonical; ?>"><?php echo _lang("Channel"); ?></a></li>
+    <li class="<?php echo aTab("profile");?>"><a href="<?php echo $canonical; ?>"><?php echo _lang("Profile"); ?></a></li>
 	<li class="<?php echo aTab("comments");?>"><a href="<?php echo $canonical; ?>?sk=comments"><?php echo _lang("About"); ?></a></li>
-	<li class="<?php echo aTab("collections");?>"><a href="<?php echo $canonical; ?>?sk=collections"><?php echo _lang("Collections"); ?></a></li>
+	<!--<li class="<?php echo aTab("collections");?>"><a href="<?php echo $canonical; ?>?sk=collections"><?php echo _lang("Collections"); ?></a></li> -->
     <li class="<?php echo aTab("videos");?>"><a href="<?php echo $canonical; ?>?sk=videos"><?php echo _lang("Videos"); ?></a></li>
    <li class="<?php echo aTab("activity");?>"><a href="<?php echo $canonical; ?>?sk=activity"><?php echo _lang("Activity"); ?></a></li>
   </ul>
