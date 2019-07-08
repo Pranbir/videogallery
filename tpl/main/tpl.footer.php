@@ -15,7 +15,7 @@ $footer .='<div class="row footer-holder">
 <div class="row row-socials">
 ';
 $footer .='
-<ul class="socialfooter">';
+<ul class="socialfooter hideTheElement">';
  if(not_empty(get_option("our_facebook", "#"))) { 
   $footer .= '<li class="facebook">
     <a rel="nofollow" class="tipS" href="'.get_option("our_facebook").'" target="_blank" title="'._lang("Facebook").'"></a>

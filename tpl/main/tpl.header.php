@@ -243,6 +243,18 @@ $nav .= '
 </div>
 </div>
 ';
+global $db;
+//$locations = $db->get_results("SELECT DISTINCT(location) FROM ".DB_PREFIX."videos;");
+$locations = $db->get_results("SELECT DISTINCT(title) FROM ".DB_PREFIX."playlists WHERE `type` = 1;");
+
+$locationlist= "";
+
+foreach ($locations as $loc) {
+	//$locationlist .= '<option value = "'.$loc->location.'" > '.$loc->location.'</option>';
+	$locationlist .= '<option value = "'.$loc->title.'" > '.$loc->title.'</option>';
+}
+//print_r($locations);
+//echo $locationlist;
 
 $nav.= '<div id="dateTimePickModal" class="modal fade" role="dialog" style="top: 50px;">
   <div class="modal-dialog">
@@ -259,7 +271,8 @@ $nav.= '<div id="dateTimePickModal" class="modal fade" role="dialog" style="top:
 			<label class="col-md-6 col-xs-12"> Start time : <input style="background: inherit;" id="dateTimePick_startTime" type="time" class="form-control"></label>
 			<label class="col-md-6 col-xs-12">End Date : <input style="background: inherit;" id="dateTimePick_endDate" type="date" placeholder="Date" class="form-control"></label>
 			<label class="col-md-6 col-xs-12"> End time : <input style="background: inherit;" id="dateTimePick_endTime" type="time" class="form-control"></label>
-			<label class="col-md-6 col-xs-12"> Location : <input style="background: inherit;" id="dateTimePick_location" type="text" class="form-control"></label>
+			<!-- <label class="col-md-6 col-xs-12"> Location : <input style="background: inherit;" id="dateTimePick_location" type="text" class="form-control"></label> -->
+			<label class="col-md-6 col-xs-12"> Location : <select style="background: inherit;" id="dateTimePick_location" class="form-control"> '.$locationlist.' </select></label>
 		</div>
       </div>
       <div class="modal-footer">

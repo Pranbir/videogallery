@@ -1191,3 +1191,11 @@ function downloadVideo(){
 		
 	}
 }
+
+
+$('#dateTimePick_startDate').change( function(e){
+	$('#dateTimePick_startTime').val('00:00');
+});
+$('#dateTimePick_endDate').change( function(e){
+	$('#dateTimePick_endTime').val('23:59');
+});
