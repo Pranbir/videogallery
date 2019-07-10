@@ -613,12 +613,14 @@ if($check->nr < 1) {
 //You're not subscribed
 $btnc = "btn btn-primary ";
 //echo '<a id="subscribe-'.$user.'" data-next="'._lang("subscribed").'" class="'.$btnc.' pv_tip" href="javascript:Subscribe('.$user.', 1)" title="'._lang('Click to add a subscription').'">'._lang('Subscribe').' '.$ktool.'</a>';
+echo '<a id="shareVideoButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:shareVideo()" title="'._lang('Share the video').'">'._lang('Share media').'</a>';
 echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Download media').'</a>';
 } else {
 //You are, but can unsubscribe
 //$btnc = "btn btn-default subscriber";
 $btnc = "btn btn-primary";
 //echo '<a id="subscribe-'.$user.'" data-next="'._lang("unsubscribed").'" class="'.$btnc.' pv_tip" href="javascript:Subscribe('.$user.', 3)" title="'._lang('Click to remove subscription').'">'._lang('Subscribed').' '.$ktool.'</a>';
+echo '<a id="shareVideoButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:shareVideo()" title="'._lang('Share the video').'">'._lang('Share media').'</a>';
 echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Download media').'</a>';
 }
 } else {
@@ -628,7 +630,47 @@ global $video;
 //$btnc = "btn btn-default subscriber";
 $btnc = "btn btn-primary";
 //echo '<a target="_blank" href="'.site_url().me.'?sk=edit-video&vid='.$video->id.'" class="'.$btnc.'"><i class="icon icon-cogs"></i>'._lang('Edit media').'</a>';
+echo '<a id="shareVideoButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:shareVideo()" title="'._lang('Share the video').'">'._lang('Share media').'</a>';
 echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Download media').'</a>';
+
+echo '<div id="videoShareModal" class="modal fade" role="dialog" style="top: 50px;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Share video</h4>
+      </div>
+      <div class="modal-body" style="background: #15254c;">
+        <div class="form-group row">
+			<label class="col-md-6 col-xs-12">Share with :
+				<select style="background: inherit;" id="shareType" class="form-control" >
+					<option value="int_user">Internal User</option>
+					<option value="ext_user">External User</option>
+				</select>
+			</label>
+<label id="intUserLabel" class="col-md-6 col-xs-12">Select User :
+				<select style="background: inherit;" id="intUserVal" class="form-control" >
+					<option value="1">User 1</option>
+					<option value="2">User 2</option>
+				</select>
+			</label>
+<label id="extUserLabel" class="col-md-6 col-xs-12" style="display:none;">Enter email :
+<input type="email" class="form-control" style="background: inherit;" id="extUserVal"/>
+				</label>
+
+			
+		</div>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-success legitRipple" onClick="alert(\' Work in Progress. \');" >Submit</button>
+        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
 }elseif(is_picture()) {
 global $image;
 $btnc = "btn btn-default subscriber";

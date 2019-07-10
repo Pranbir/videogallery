@@ -1192,6 +1192,20 @@ function downloadVideo(){
 	}
 }
 
+function shareVideo(){
+	$('#videoShareModal').modal('show');
+}
+
+$('#shareType').change(function(){
+	if($('#shareType').val() == "int_user"){
+			$('#intUserLabel').show();
+			$('#extUserLabel').hide();
+		}
+		else{
+			$('#extUserLabel').show();
+			$('#intUserLabel').hide();
+		}
+});
 
 $('#dateTimePick_startDate').change( function(e){
 	$('#dateTimePick_startTime').val('00:00');
