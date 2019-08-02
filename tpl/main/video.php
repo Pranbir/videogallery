@@ -199,7 +199,7 @@
 							<p>  '.time_ago($video->date).'</p>
 						</div>';?>
 						
-                        <div class="pull-right"><?php subscribe_box($video->user_id);?></div>
+                        <div class="pull-right" style="max-width:100%;"><?php subscribe_box($video->user_id);?></div>
                     </div>					
                     <div style="clear:both"></div>
                 </div>
