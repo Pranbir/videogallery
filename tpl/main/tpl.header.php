@@ -158,7 +158,23 @@ $nav .= '> <div class="search-holder">
 					" id="time_rage_selector" class="btn legitRipple btn-md" >
 						<i class="material-icons" style=" font-size: 10p;">&#xE05F;</i>
 					</a>
+					<a onClick="showDateTimeWarePick();" style="display:none;
+					background: none;
+					border: 0;
+					box-shadow: none;
+					outline: 0;
+					z-index: 12;
+					font-size: 24px;
+					line-height: 46px;
+					padding: 0 17px;
+					vertical-align: top;
+					color: rgba(0,0,0,0.38);
+					background-color: #FAFAFA;
+					" id="time_ware_rage_selector" class="btn legitRipple btn-md" >
+						<i class="material-icons" style=" font-size: 10p;">&#xE05F;</i>
+					</a>
 					</span>
+				
 					<div class="search-target">
 					<a id="switch-search" class="dropdown-toggle"  data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button"><i class="icon material-icons">&#xE63A;</i></a>
 					<input type="text" id="switch-com" class="hide" name="component" value ="video">                
@@ -172,8 +188,11 @@ $nav .= '> <div class="search-holder">
 					<li role="presentation"><a id="s-item" href="javascript:SearchSwitch(\'item\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Item Number").'</a></li>
 					
 					<li role="presentation"><a id="s-comment" href="javascript:SearchSwitch(\'comment\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Comment").'</a></li>
-					
+					<!--
 					<li role="presentation"><a id="s-time_range" href="javascript:SearchSwitch(\'time_range\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Time range").'</a></li>
+-->
+					<li role="presentation"><a id="s-time_range_ware" href="javascript:SearchSwitch(\'time_range_ware\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Time range/Warehouse").'</a></li>
+
 					</ul>
 					</div>
                     <div class="form-control-wrap">
@@ -246,13 +265,28 @@ $nav .= '
 global $db;
 //$locations = $db->get_results("SELECT DISTINCT(location) FROM ".DB_PREFIX."videos;");
 $locations = $db->get_results("SELECT DISTINCT(title) FROM ".DB_PREFIX."playlists WHERE `type` = 1;");
-
+$warehouses = $db->get_results("SELECT id,title FROM ".DB_PREFIX."warehouses;");
+//$warehouses_door = $db->get_results("SELECT id,title FROM ".DB_PREFIX."warehouses_doors;");
 $locationlist= "";
+$warehouseslist= '<option value = "" > Select WareHouse </option>';
+$warehouses_doorlist= '<option value = "" > Select WareHouse First</option>';
 
 foreach ($locations as $loc) {
 	//$locationlist .= '<option value = "'.$loc->location.'" > '.$loc->location.'</option>';
 	$locationlist .= '<option value = "'.$loc->title.'" > '.$loc->title.'</option>';
 }
+
+foreach ($warehouses as $loc) {
+	//$locationlist .= '<option value = "'.$loc->location.'" > '.$loc->location.'</option>';
+	$warehouseslist .= '<option value = "'.$loc->id.'" > '.$loc->title.'</option>';
+}
+/*
+foreach ($warehouses_door as $loc) {
+	//$locationlist .= '<option value = "'.$loc->location.'" > '.$loc->location.'</option>';
+	$warehouses_doorlist .= '<option value = "'.$loc->id.'" > '.$loc->title.'</option>';
+}
+*/
+
 //print_r($locations);
 //echo $locationlist;
 
@@ -283,5 +317,65 @@ $nav.= '<div id="dateTimePickModal" class="modal fade" role="dialog" style="top:
 
   </div>
 </div>';
-return $nav;
+
+
+$nav.= '<div id="dateTimeWarePickModal" class="modal fade" role="dialog" style="top: 50px;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Choose date and time</h4>
+      </div>
+      <div class="modal-body" style="background: #15254c;">
+        <div class="form-group row">
+			<label class="col-md-6 col-xs-12">Start Date : <input style="background: inherit;" id="dateTimeWarePick_startDate" type="date" placeholder="Date" class="form-control"></label>
+			<label class="col-md-6 col-xs-12"> Start time : <input style="background: inherit;" id="dateTimeWarePick_startTime" type="time" class="form-control"></label>
+			<label class="col-md-6 col-xs-12">End Date : <input style="background: inherit;" id="dateTimeWarePick_endDate" type="date" placeholder="Date" class="form-control"></label>
+			<label class="col-md-6 col-xs-12"> End time : <input style="background: inherit;" id="dateTimeWarePick_endTime" type="time" class="form-control"></label>
+			<!-- <label class="col-md-6 col-xs-12"> Location : <input style="background: inherit;" id="dateTimeWarePick_location" type="text" class="form-control"></label> -->
+			<label class="col-md-6 col-xs-12">Warehouse : <select style="background: inherit;" id="dateTimeWarePick_warehouse" class="form-control" > '.$warehouseslist.' </select></label>
+			<label class="col-md-6 col-xs-12">Door : <select style="background: inherit;" id="dateTimeDoorPick_warehouse" class="form-control"> '.$warehouses_doorlist.' </select></label>
+
+		</div>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-success legitRipple" onClick="generateDateTimeWareSearchValue();" >Submit</button>
+        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
+
+$nav.= '<script type="text/javascript">
+		$("#dateTimeWarePick_warehouse").change(function() {
+			//get the selected value
+			var selectedValue = this.value;
+			console.log(selectedValue);
+			//$("#dateTimeDoorPick_warehouse").val = selectedValue;
+			var $select = $("#dateTimeDoorPick_warehouse");
+			$select.find("option").remove();
+			
+			
+			$.ajax({
+				url: "/tpl/main/fetch_doorno.php",
+				type: "POST",
+				data: {"query": selectedValue},
+				success: function(res) {
+					console.log(res);
+					if(res){
+						$select.append("<option value= >All Doors</option>");
+						$select.append(res);
+					}else{
+						$select.append("<option value =  > Select WareHouse First</option>");
+					} 
+				}
+			});
+});
+
+		</script>';
+
+		return $nav;
 }

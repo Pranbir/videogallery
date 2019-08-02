@@ -853,12 +853,20 @@ function SearchSwitch(com) {
 	console.log($button);
 	if(com == "time_range"){
 		console.log("Trigger New formula");
-		$('#time_rage_selector').show();
+        $('#time_rage_selector').show();
+        $('#time_ware_rage_selector').hide();
 		$('.searchWidget .search-target').css({"right":"150px"});
 		$('#dateTimePickModal').modal('show');
-	}
+	}else if(com == "time_range_ware"){
+        console.log("Trigger New Ware formula");
+		$('#time_ware_rage_selector').show();
+        $('#time_rage_selector').hide();
+        $('.searchWidget .search-target').css({"right":"150px"});
+		$('#dateTimeWarePickModal').modal('show');
+    }
 	else{
-		$('#time_rage_selector').hide();
+        $('#time_rage_selector').hide();
+        $('#time_ware_rage_selector').hide();
 		$('.searchWidget .search-target').css({"right":"75px"});
 	}
 
@@ -1102,7 +1110,12 @@ $('#share-embed-code-small').val(str);
 function showDateTimePick(){
  $('#dateTimePickModal').modal('show');
 }
-function generateDateTimeSearchValue(){
+
+function showDateTimeWarePick(){
+    $('#dateTimeWarePickModal').modal('show');
+   }
+
+   function generateDateTimeSearchValue(){
 	let startDateVal = $('#dateTimePick_startDate').val();
 	let endDateVal = $('#dateTimePick_endDate').val();
 	let startTimeVal = $('#dateTimePick_startTime').val();
@@ -1136,7 +1149,62 @@ function generateDateTimeSearchValue(){
 	
 }
 
-
+function generateDateTimeWareSearchValue(){
+	let startDateVal = $('#dateTimeWarePick_startDate').val();
+	let endDateVal = $('#dateTimeWarePick_endDate').val();
+	let startTimeVal = $('#dateTimeWarePick_startTime').val();
+	let endTimeVal = $('#dateTimeWarePick_endTime').val();
+	let output="";
+	//Validation
+	
+	if(startDateVal == "" || endDateVal == "" || startTimeVal == "" || endTimeVal == ""){
+		if($('#dateTimeWarePick_warehouse').val().trim() != ""){
+            if($('#dateTimeDoorPick_warehouse').val().trim() != ""){
+                output= $('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                $("#searchform > div > div.form-control-wrap > input").val(output);
+                SearchSwitch('ware_door')
+                $('#searchform').submit();
+            }else {
+                output= $('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                $("#searchform > div > div.form-control-wrap > input").val(output);
+                SearchSwitch('ware')
+                $('#searchform').submit();
+            }
+		
+		}
+		else{
+            alert("Please select atleast Warehouse.");
+            return false;
+		}
+	}
+	else{
+		if($('#dateTimeWarePick_warehouse').val().trim() != ""){
+            if($('#dateTimeDoorPick_warehouse').val().trim() != ""){
+                output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                $("#searchform > div > div.form-control-wrap > input").val(output);
+                SearchSwitch('time_range_ware_door')
+                $('#searchform').submit();
+            }else {
+                output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                $("#searchform > div > div.form-control-wrap > input").val(output);
+                SearchSwitch('time_range_ware')
+                $('#searchform').submit();
+            }
+		
+		}
+		else{
+		output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00";
+		$("#searchform > div > div.form-control-wrap > input").val(output);
+		$('#searchform').submit();
+		$('#dateTimePick_date').val("");
+		$('#dateTimePick_startTime').val("");
+		$('#dateTimePick_endTime').val("");
+		$('#dateTimePickModal').modal('hide');
+		}
+		
+	}
+	
+}
 
 //#############TEST CODE
 /* Helper function */
@@ -1191,6 +1259,7 @@ function downloadVideo(){
 		
 	}
 }
+
 
 function shareVideo(){
 	$('#videoShareModal').modal('show');

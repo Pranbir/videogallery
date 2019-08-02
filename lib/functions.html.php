@@ -519,6 +519,11 @@ function makeLn($text) {
 $text = preg_replace('#(<br */?>\s*)+#i', '<br />', $text);
 return linkify($text);
 }
+function split_load_numbers($load_numbers){
+	$arr_load_number =explode(',', $load_numbers);
+	
+	return $arr_load_number;
+}
 function linkify($value, $protocols = array('http', 'mail'), array $attributes = array("rel"=>"nofollow","target"=>"_blank"))
     {
         // Link attributes

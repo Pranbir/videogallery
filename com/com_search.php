@@ -46,6 +46,48 @@ else if(not_empty($ntype) && trim($ntype)=="time_range_loc"){
 	
 	$heading = "From : ".$timeArray[0]." to ".$timeArray[1].". <br>Location search string : ".$timeArray[2];	
 	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="ware_door"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	$heading = "Search string Warehouse: ".$timeArray[2]."/Door : ".$timeArray[1];	
+	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="ware"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	$heading = "Search string Warehouse: ".$timeArray[1];	
+	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="time_range_ware_door"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	if(!isset($timeArray[0]) || $timeArray[0]==""){$timeArray[0] = date("Y-m-d H:i:s");}
+	
+	if(!isset($timeArray[1]) || $timeArray[1] == ""){$timeArray[1] = date("Y-m-d H:i:s");}
+	if(!isset($timeArray[2]) || $timeArray[2] == ""){$timeArray[2] = "";}
+	
+	$heading = "From : ".$timeArray[0]." to ".$timeArray[1].". <br>Search string Warehouse: ".$timeArray[4]."/Door : ".$timeArray[3];	
+	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="time_range_ware"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	if(!isset($timeArray[0]) || $timeArray[0]==""){$timeArray[0] = date("Y-m-d H:i:s");}
+	
+	if(!isset($timeArray[1]) || $timeArray[1] == ""){$timeArray[1] = date("Y-m-d H:i:s");}
+	if(!isset($timeArray[2]) || $timeArray[2] == ""){$timeArray[2] = "";}
+	
+	$heading = "From : ".$timeArray[0]." to ".$timeArray[1].". <br>Warehouse search string : ".$timeArray[3];	
+	//$heading = "YYUYU";	
 }
 else if (not_empty($ntype) && trim($ntype)=="location"){	
 	$heading = _lang('Location : ').ucfirst(str_replace(array("+","-")," ",$key));	
@@ -139,6 +181,36 @@ $options = DB_PREFIX."videos.id,".DB_PREFIX."videos.description,".DB_PREFIX."vid
 				FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
 					WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
 					AND LOCATION LIKE '%$timeArray[2]%'
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'ware_door':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
+				FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					WHERE WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1]
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'ware':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
+				FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					WHERE WAREHOUSE LIKE '%$timeArray[0]%'
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'time_range_ware_door':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
+				FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+					AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3]
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'time_range_ware':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
+				FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+					AND WAREHOUSE LIKE '%$timeArray[2]%'
 					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
 			//die($vq);
 			break;

@@ -284,11 +284,11 @@
                 </div>
                 </div>
                 <?php do_action('before-description-box'); ?>
-                <div class="mtop10 oboxed odet">
+                <div class="mtop10 oboxed odet col-md-6">
                     <ul id="media-info" class="list-unstyled">
                         <li>                           
                            
-<div class="fb-like pull-left" style="display:none;" data-href="<?php echo $canonical; ?>" data-width="124" data-layout="standard" data-colorscheme="dark" data-action="like" data-show-faces="true" data-share="true"></div>
+                    <div class="fb-like pull-left" style="display:none;" data-href="<?php echo $canonical; ?>" data-width="124" data-layout="standard" data-colorscheme="dark" data-action="like" data-show-faces="true" data-share="true"></div>
                           </li>
 						  <li><h4><u>Details :</u></h4></li>
 						  <li>
@@ -303,6 +303,66 @@
 							<p> <?php echo pretty_tags($video->tags,'right20','#','');?></p>
 							<?php } ?>
                             </div>
+                        </li>                      
+                    </ul>
+                 
+                    <?php do_action('after-description-box'); ?>
+                </div>
+                <div class="mtop10 oboxed odet col-md-6">
+                    <ul id="media-info" class="list-unstyled">
+                        <li>                           
+                           
+                    <div class="fb-like pull-left" style="display:none;" data-href="<?php echo $canonical; ?>" data-width="124" data-layout="standard" data-colorscheme="dark" data-action="like" data-show-faces="true" data-share="true"></div>
+                          </li>
+						  <li><h4><u>Load No. :</u></h4></li>
+						  <li>
+						  <div id ="media-description" data-small="<?php echo _lang("show more");?>" data-big=" <?php echo _lang("show less");?>">
+                            <?php 
+                                
+                                /*
+                                foreach(split_load_numbers($video->load_numbers) as $ln){
+                                    $ln1 = "'".$ln."'";
+                                    echo '<li>';
+                                    echo '<input type="text" id="LD_'.$load_number_count.'" value="'.$ln.'" disabled>';
+                                    echo '<a id="e_'.$load_number_count.'" class="btn btn-warning" href="javascript:edit_load_number('.$load_number_count.' )" >Edit</a>';
+                                    echo '<a id="s_'.$load_number_count.'" class="btn btn-warning" href="javascript:save_load_number('.$load_number_count.')" style="display: none;">Save</a>';
+                                    echo '</li>';
+                                    $load_number_count = $load_number_count +1;
+                                   
+                                }
+                               */
+                                //if($load_number_count <21){
+                                    //echo '<a class="btn btn-success" href="javascript:add_new_load_number()">Add</a>';
+                                    for($load_number_count = 1;$load_number_count < 21; $load_number_count++){
+                                        echo '<li>';
+                                        if($video->load_.$load_number_count){
+                                            $val = 'load_'.$load_number_count;
+                                            echo '<input type="text" id="LD_'.$load_number_count.'" value="'.$video->$val.'" disabled>';
+                                        }else{
+                                            echo '<input type="text" id="LD_'.$load_number_count.'" value="" disabled>';
+                                        }
+                                        echo '<a id="e_'.$load_number_count.'" class="btn btn-warning" href="javascript:edit_load_number('.$load_number_count.' )" >Edit</a>';
+                                        echo '<a id="s_'.$load_number_count.'" class="btn btn-warning" href="javascript:save_load_number('.$load_number_count.')" style="display: none;">Save</a>';
+                                        echo '</li>';
+                                    }
+                                //}
+                                
+                            ?>
+                            <script type="text/javascript">
+                                function add_new_load_number(){
+                                    $("#media-info ul").append('<li>New Row</li>');
+                                    <?php
+                                    
+                                //    echo '<input type="text" id="LD_'.$load_number_count.'" value="">';
+                                //    echo '<a id="e_'.$load_number_count.'" class="btn btn-warning" href="javascript:edit_load_number('.$load_number_count.' )" style="display: none;">Edit</a>';
+                                //    echo '<a id="s_'.$load_number_count.'" class="btn btn-warning" href="javascript:save_load_number('.$load_number_count.')" >Save</a>';
+
+                                //    $load_number_count = $load_number_count +1;
+                                    ?>
+                                    console.log('<?php echo $load_number_count; ?>');
+                                }
+                            </script>
+							</div>
                         </li>                      
                     </ul>
                  
@@ -336,7 +396,68 @@
 $(document).ready(function(){
 	DOtrackview(<?php echo $video->id; ?>);
 });
+function edit_load_number(val){
+    
+    var id = '#LD_'+val;
+    var e_button_id = '#e_'+val;
+    var s_button_id = '#s_'+val;
+    $(id).prop('disabled', false);
+    $(e_button_id).hide();
+    $(s_button_id).show();
+    document.cookie = "colname=";
+    //console.log(val);
+}
 
+function save_load_number(val){
+    var id = '#LD_'+val;
+    var e_button_id = '#e_'+val;
+    var s_button_id = '#s_'+val;
+    var col_name = 'load_'+val;
+    var col_val = "'"+$(id).val()+"'";
+    var vid_id = <?php echo $video->id; ?>;
+
+  $.ajax({
+				url: "/tpl/main/update_load.php",
+				type: "POST",
+                data: {"col_name": col_name,
+                        "col_val": col_val,
+                        "vid_id": vid_id},
+				success: function(res) {
+				//	console.log(res);
+					
+				}
+			});
+  $(id).prop('disabled', true);
+    $(e_button_id).show();
+    $(s_button_id).hide();
+  
+}
+
+
+$("#dateTimeWarePick_warehouse").change(function() {
+			//get the selected value
+			var selectedValue = this.value;
+			console.log(selectedValue);
+			//$("#dateTimeDoorPick_warehouse").val = selectedValue;
+			var $select = $("#dateTimeDoorPick_warehouse");
+			$select.find("option").remove();
+			
+			
+			$.ajax({
+				url: "/tpl/main/fetch_doorno.php",
+				type: "POST",
+				data: {"query": selectedValue},
+				success: function(res) {
+					console.log(res);
+					if(res){
+						$select.append("<option value= >All Doors</option>");
+						$select.append(res);
+					}else{
+						$select.append("<option value =  > Select WareHouse First</option>");
+					} 
+				}
+			});
+});
         </script>
     </div>
     <?php do_action('post-video'); ?>

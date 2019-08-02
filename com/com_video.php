@@ -14,7 +14,7 @@ exit();
 }
 
 $cache_name = "video-".$v_id;
-$video = $cachedb->get_row("SELECT ".DB_PREFIX."videos.*, ".DB_PREFIX."channels.cat_name as channel_name ,".DB_PREFIX."users.avatar, ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id, ".DB_PREFIX."users.avatar FROM ".DB_PREFIX."videos 
+$video = $cachedb->get_row("SELECT ".DB_PREFIX."videos.*, CONCAT_WS(',', ".DB_PREFIX."videos.`load_1`,".DB_PREFIX."videos.`load_2`,".DB_PREFIX."videos.`load_3`,".DB_PREFIX."videos.`load_4`,".DB_PREFIX."videos.`load_5`,".DB_PREFIX."videos.`load_6`,".DB_PREFIX."videos.`load_7`,".DB_PREFIX."videos.`load_8`,".DB_PREFIX."videos.`load_9`,".DB_PREFIX."videos.`load_10`,".DB_PREFIX."videos.`load_11`,".DB_PREFIX."videos.`load_12`,".DB_PREFIX."videos.`load_13`,".DB_PREFIX."videos.`load_14`,".DB_PREFIX."videos.`load_15`,".DB_PREFIX."videos.`load_16`,".DB_PREFIX."videos.`load_17`,".DB_PREFIX."videos.`load_18`,".DB_PREFIX."videos.`load_19`,".DB_PREFIX."videos.`load_20` ) AS load_numbers,".DB_PREFIX."channels.cat_name as channel_name ,".DB_PREFIX."users.avatar, ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id, ".DB_PREFIX."users.avatar FROM ".DB_PREFIX."videos 
 LEFT JOIN ".DB_PREFIX."channels ON ".DB_PREFIX."videos.category =".DB_PREFIX."channels.cat_id LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id WHERE ".DB_PREFIX."videos.`id` = '".$v_id."' limit 0,1");
 $cache_name = null; //reset 
 if ($video) {
