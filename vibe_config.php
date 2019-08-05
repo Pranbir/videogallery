@@ -14,7 +14,7 @@ die();
 define( 'DB_USER', 'root' );
 
 /** MySQL database password */
-define( 'DB_PASS', '' );
+define( 'DB_PASS', 'georgea' );
 
 /** The name of the database */
 define( 'DB_NAME', 'instavideo2' );
@@ -37,7 +37,7 @@ Create it in the store, under "My Licenses" **/
 define( 'phpVibeKey', 'the key goes here' );
 
 /** Site url (with end slash, ex: http://www.domain.com/ ) **/
-define( 'SITE_URL', 'http://pranbir.com/' );
+define( 'SITE_URL', 'http://videosolution.com/' );
 
 /** Admin folder, rename it and change it here **/
 define( 'ADMINCP', 'moderator' );
