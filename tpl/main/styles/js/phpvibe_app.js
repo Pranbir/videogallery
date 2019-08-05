@@ -1265,6 +1265,93 @@ function shareVideo(){
 	$('#videoShareModal').modal('show');
 }
 
+function customDownloadVideo(){
+    $('#customDownloadModal').modal('show');
+}
+
+function cropVideo(){
+    var st = $('#start-time .hr').val() + ":" + $('#start-time .mm').val() + ":" + $('#start-time .ss').val();
+    var et = $('#end-time .hr').val() + ":" + $('#end-time .mm').val() + ":" + $('#end-time .ss').val();
+
+    if(et=="00:00:00")
+    {
+        alert("Please enter valid end time!");
+    } else if(st==et){
+        alert("Start time and end time should not be same.");
+    }else if(st>et){
+        alert("End time should not be less than start time.");
+    }else{
+        alert("start time - end time are: "+st+" -> "+et);
+
+        let vidLink;
+        if($('#jp_video_0').length == 1) {      
+            vidLink = $('#jp_video_0').attr('src');
+            crop_download_file(vidLink, st, et);
+        }
+        else if ($("#video-setup > div.jw-media.jw-reset > video").length == 1){
+            vidLink = $("#video-setup > div.jw-media.jw-reset > video").attr('src');
+            crop_download_file(vidLink, st, et);
+        }
+        else{
+            alert("No video found in page.");
+        }        
+    }
+}
+
+function crop_download_file(link,st,et){
+   
+    $.ajax({
+<<<<<<< HEAD
+      url: "http://videosolution.com/crop.php",
+=======
+      url: "http://pranbir.com/crop.php",
+>>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
+      type: "POST",
+      dataType:'json',
+      data: {"vlink": link, "st":st, "et":et},
+      success: function(data){
+          if(data.output!='' || data.output!=undefined){
+            // alert("hi"+data.output);
+<<<<<<< HEAD
+            download_file("http://videosolution.com/crop-videos/"+data.output, "Video");
+=======
+            download_file("http://pranbir.com/crop-videos/"+data.output, "Video");
+>>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
+          }
+
+          if(data.error){
+            alert("Error: "+ data.error);  
+          }
+      },  
+      error: function(xhr,status,error){
+          alert("Error in downloading!");
+      }
+    });
+}
+
+
+$('.mm, .ss').on('change', function(){
+    if(parseInt($(this).val()) < 60){
+        if(parseInt($(this).val())<10){
+            $(this).val("0"+ parseInt($(this).val()));
+        } else
+        return true;
+    }
+    else
+    $(this).val("00");
+})
+
+$('.hr').on('change', function(){
+    if(parseInt($(this).val())<10){
+        $(this).val("0"+ parseInt($(this).val()));
+    } else
+    return true;
+})
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
 $('#shareType').change(function(){
 	if($('#shareType').val() == "int_user"){
 			$('#intUserLabel').show();
