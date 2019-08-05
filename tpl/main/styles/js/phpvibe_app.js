@@ -1301,22 +1301,14 @@ function cropVideo(){
 function crop_download_file(link,st,et){
    
     $.ajax({
-<<<<<<< HEAD
       url: "http://videosolution.com/crop.php",
-=======
-      url: "http://pranbir.com/crop.php",
->>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
       type: "POST",
       dataType:'json',
       data: {"vlink": link, "st":st, "et":et},
       success: function(data){
           if(data.output!='' || data.output!=undefined){
             // alert("hi"+data.output);
-<<<<<<< HEAD
             download_file("http://videosolution.com/crop-videos/"+data.output, "Video");
-=======
-            download_file("http://pranbir.com/crop-videos/"+data.output, "Video");
->>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
           }
 
           if(data.error){
@@ -1348,10 +1340,7 @@ $('.hr').on('change', function(){
     return true;
 })
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
 $('#shareType').change(function(){
 	if($('#shareType').val() == "int_user"){
 			$('#intUserLabel').show();

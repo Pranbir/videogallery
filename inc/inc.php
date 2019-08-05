@@ -58,16 +58,14 @@ function cutVideoAndSave($file, $arrSupportExt, $startTime, $endTime) {
         $cmd = cutCommandBuilder( $file, $startTime, $endTime, $osType);
         // echo "command: ".$cmd;
         system($cmd[1]);
-<<<<<<< HEAD
+
 
         $duration = getVideoLength($file);
         $t = convertSecondToTimeCode($duration);
         // echo "\n";
         echo json_encode(array('output' => $cmd[0], "duration" => $t ));
-=======
-        // echo "\n";
-        echo json_encode(array('output' => $cmd[0] ));
->>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
+
+
     } else {
         echo json_encode(array('error' => "Supported file formats are: " . implode(",",$arrSupportExt)));
     }
@@ -125,11 +123,9 @@ function convertSecondToTimeCode($timeSecond) {
             $min -= 60;
         }
     }
-<<<<<<< HEAD
-    // echo "hour:{$hour} min: {$min} | second : {$timeSecond}" . " = " . $oldTimeSecond;
-=======
+
     echo "hour:{$hour} min: {$min} | second : {$timeSecond}" . " = " . $oldTimeSecond;
->>>>>>> 52956f1ef0ee106c25b94f5bd27aec04e6d72a7e
+
 
     return "{$hour}:${min}:{$timeSecond}";
 }; //convert second to TimeCode ;
