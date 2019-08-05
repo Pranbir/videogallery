@@ -14,7 +14,7 @@ die();
 define( 'DB_USER', 'root' );
 
 /** MySQL database password */
-define( 'DB_PASS', 'georgea' );
+define( 'DB_PASS', '' );
 
 /** The name of the database */
 define( 'DB_NAME', 'instavideo2' );
