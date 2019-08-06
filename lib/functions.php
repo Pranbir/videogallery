@@ -682,12 +682,14 @@ echo '<div id="customDownloadModal" class="modal fade" role="dialog" style="top:
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Crop Video</h4>
+        <h4 class="modal-title">Crop Video<span id="duration" style="font-size:12px;"></span></h4>
       </div>
       <div class="modal-body" style="background: #15254c;">
 		<div class="form-group row" style="margin-top: 20px;">
-<!--
-			<label class="col-md-6 col-xs-12">Start time:
+
+			<div id="input-holder"></div>
+
+			<!-- <label class="col-md-6 col-xs-12">Start time:
 				<input class="without" type="time" name="start-time" id="start-time" step="1">
 			</label>
 
@@ -695,6 +697,7 @@ echo '<div id="customDownloadModal" class="modal fade" role="dialog" style="top:
 				<input class="without" type="time" name="end-time" id="end-time" step="1">
 			</label> -->
 
+			<!--
 			<div id="start-time">
 				<label class="col-md-6 col-xs-12">Start time:
 					<input type="text" name="start-time-hr" class="hr" maxlength="2" size="2" value="00"> : 
@@ -710,7 +713,7 @@ echo '<div id="customDownloadModal" class="modal fade" role="dialog" style="top:
 					<input type="text" name="end-time-mm" class="mm" maxlength="2" size="2" value="00"> :  
 					<input type="text" name="end-time-ss" class="ss" maxlength="2" size="2" value="00">
 					<br><div style="margin-left: 71px;">hr:mm:ss</div> 
-			</div>
+			</div>  -->
 
 		</div>
       </div>

@@ -1266,12 +1266,100 @@ function shareVideo(){
 }
 
 function customDownloadVideo(){
-    $('#customDownloadModal').modal('show');
+    // $('#customDownloadModal').modal('show');
+    getVideoTimeline();
 }
 
+var oldStTime, oldEtTime;
+
+function getVideoTimeline(){
+
+    var title = $("h1").text();
+    title = title.trim();
+
+    $.ajax({
+      url: "http://videosolution.com/get_video_len.php",
+      type: "POST",
+      dataType:'json',
+      data: {"title": title},
+      success: function(data){
+          if(data){
+            var st = data.start_date_time;
+            var et = data.end_date_time;
+            // console.log("st: ",st,"et: ",et);
+
+            var sdate = new Date(st );
+            var shour = sdate.getHours();
+            var smin = sdate.getMinutes();
+            var ssecs = sdate.getSeconds();
+            st = shour+":"+smin+":"+ssecs;
+            // alert("hi");
+            // console.log("st: ",st);
+
+            $("#start-time").val(st);
+
+            var edate = new Date(et );
+            var ehour = edate.getHours();
+            var emin = edate.getMinutes();
+            var esecs = edate.getSeconds();
+            et = ehour+":"+emin+":"+esecs;
+            $("#end-time").val(et);
+            // console.log("st: ",st,"et: ",et);
+
+            $("#start_time, #end-time").attr("min",st);
+            $("#start_time, #end-time").attr("max",et);
+
+            $('#customDownloadModal').modal('show');
+
+            var inputs = '<label class="col-md-6 col-xs-12">Start time: '+
+            '<input class="without" type="time" name="start-time" id="start-time" step="1" min="'+st+'" max="'+et+'" value="'+st+'">'+
+            '</label>'+
+            '<label id="intUserLabel" class="col-md-6 col-xs-12">End time: '+
+            '<input class="without" type="time" name="end-time" id="end-time" step="1" min="'+st+'" max="'+et+'"  value="'+et+'">'+
+            '</label>';
+            $("#input-holder").empty();
+            $("#input-holder").append(inputs);
+            $("#duration").text(' (original duration: '+st+' - '+et+')');
+            oldStTime =st;
+            oldEtTime =et;
+
+          }
+      },  
+      error: function(xhr,status,error){
+          alert("Error getting video timeline!");
+      }
+    });
+
+}
+
+function getDuration(start, old){
+    var result;
+
+    var startDate = new Date("July 21, 1983 " + start);
+    var oldDate = new Date("July 21, 1983 " + old);
+
+    // alert(startDate.getHours());   
+ 
+    var hr = (startDate.getHours() - oldDate.getHours());
+    var mm = startDate.getMinutes() - oldDate.getMinutes();
+    var ss = startDate.getSeconds() - oldDate.getSeconds();
+
+    hr = (hr<10) ? "0"+hr : hr;
+    mm = (mm<10) ? "0"+mm : mm;
+    ss = (ss<10) ? "0"+ss : ss;
+
+
+    result = ""+hr+":"+mm+":"+ss;
+    return result;
+}
+
+
 function cropVideo(){
-    var st = $('#start-time .hr').val() + ":" + $('#start-time .mm').val() + ":" + $('#start-time .ss').val();
-    var et = $('#end-time .hr').val() + ":" + $('#end-time .mm').val() + ":" + $('#end-time .ss').val();
+    // var st = $('#start-time .hr').val() + ":" + $('#start-time .mm').val() + ":" + $('#start-time .ss').val();
+    // var et = $('#end-time .hr').val() + ":" + $('#end-time .mm').val() + ":" + $('#end-time .ss').val();
+
+    var st = $('#start-time').val();
+    var et = $('#end-time').val();
 
     if(et=="00:00:00")
     {
@@ -1280,23 +1368,28 @@ function cropVideo(){
         alert("Start time and end time should not be same.");
     }else if(st>et){
         alert("End time should not be less than start time.");
-    }else{
-        alert("start time - end time are: "+st+" -> "+et);
+    } else{
+        // alert("start time - end time are: "+st+" -> "+et);
+
+        var videoStart = getDuration(st,oldStTime);
+        var videoEnd = getDuration(et,oldStTime);
+
+        alert("start time - end time are: "+videoStart+" -> "+videoEnd);
 
         let vidLink;
         if($('#jp_video_0').length == 1) {      
             vidLink = $('#jp_video_0').attr('src');
-            crop_download_file(vidLink, st, et);
+            crop_download_file(vidLink, videoStart, videoEnd);
         }
         else if ($("#video-setup > div.jw-media.jw-reset > video").length == 1){
             vidLink = $("#video-setup > div.jw-media.jw-reset > video").attr('src');
-            crop_download_file(vidLink, st, et);
+            crop_download_file(vidLink, videoStart, videoEnd);
         }
         else{
             alert("No video found in page.");
         }        
     }
-}
+} 
 
 function crop_download_file(link,st,et){
    

@@ -124,7 +124,8 @@ function convertSecondToTimeCode($timeSecond) {
         }
     }
 
-   // echo "hour:{$hour} min: {$min} | second : {$timeSecond}" . " = " . $oldTimeSecond;
+
+    // echo "hour:{$hour} min: {$min} | second : {$timeSecond}" . " = " . $oldTimeSecond;
 
 
     return "{$hour}:${min}:{$timeSecond}";
