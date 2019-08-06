@@ -33,8 +33,26 @@ foreach ($videos as $video) {
 			$watched = (is_watched($video->id)) ? '<span class="vSeen">'._lang("Watched").'</span>' : '';
             $wlater = (is_user()) ? '<a class="laterit" title="'._lang("Add to watch later").'" href="javascript:Padd('.$video->id.', '.later_playlist().')"><i class="material-icons">&#xE924;</i></a>' : '';
 			if(isset($video->group_id)) { $grcreative= group_creative($video->group_id); } else { $grcreative=''; };
-			$description = _html($video->description);
-            $description = _cut(trim($description),180);
+			//$description = _html($video->description);
+			$st_dt = new DateTime($video->start_date_time);
+			$en_dt = new DateTime($video->end_date_time);
+			$s_dt = $st_dt->format('Y/m/d');
+			$s_tm = $st_dt->format('H:i:s');
+			$e_tm = $en_dt->format('H:i:s');
+			$description = '<b>Date:</b> '.$s_dt; 
+			$description .= '<br>';
+			$description .= '<b>Start Time: </b>'.$s_tm;
+			$description .= '<br>';
+			$description .= '<b>End Time:</b> '.$e_tm;
+			$description .= '<br>';
+			$description .= '<b>Warehouse:</b> '.$video->warehouse_title;
+			$description .= '<br>';
+			$description .= '<b>Door No.: </b>'.$video->door;
+			if($video->comment){
+				$description .= '<br>';
+				$description .= '<b>Comment: </b>'.$video->comment;
+			}
+			$description = _cut(trim($description),180);
 			if(empty($description)) {$description = $full_title;} 
 			echo '
 <div id="video-'.$video->id.'" class="video">

@@ -1,6 +1,6 @@
 <?php $id = token_id();
 if($id > 0) {
-$playlist = $db->get_row("SELECT * FROM ".DB_PREFIX."playlists where id = '".$id ."' limit  0,1");
+$playlist = $db->get_row("SELECT ".DB_PREFIX."playlists.*, ".DB_PREFIX."warehouses.title FROM ".DB_PREFIX."playlists JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."playlists.title = ".DB_PREFIX."warehouses.location where ".DB_PREFIX."playlists.id = '".$id ."' limit  0,1");
 }
 if ($playlist) {
 // Canonical url

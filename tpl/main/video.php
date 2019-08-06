@@ -293,8 +293,38 @@
 						  <li><h4><u>Details :</u></h4></li>
 						  <li>
 						  <div id ="media-description" data-small="<?php echo _lang("show more");?>" data-big=" <?php echo _lang("show less");?>">
+                           <!--
                             <?php echo makeLn(_html($video->description));?>
-							<p style="font-weight:500; color:#333" class="hideTheElement">
+							-->
+                            <?php
+                                $st_dt = new DateTime($video->start_date_time);
+                                $en_dt = new DateTime($video->end_date_time);
+                                $s_dt = $st_dt->format('Y/m/d');
+                                $s_tm = $st_dt->format('H:i:s');
+                                $e_tm = $en_dt->format('H:i:s');
+                                echo 'Date: '.$s_dt; 
+                                echo '<br>';
+                                echo 'Start Time: '.$s_tm;
+                                echo '<br>';
+                                echo 'End Time: '.$e_tm;
+                                echo '<br>';
+                                echo 'Warehouse: '.$video->warehouse_title;
+                                echo '<br>';
+                                echo 'Door No.: '.$video->door;
+                                for($x=1;$x<21;$x++){
+                                    $load = 'load_'.$x;
+                                    if($video->$load){
+                                        echo '<br>';
+                                        echo 'Load No. '.$x.': '.$video->$load;
+                                    }
+                                    
+                                }
+                                echo '<br>';
+                                echo 'Comments: '.$video->comment;
+                                
+                            ?>
+                            
+                            <p style="font-weight:500; color:#333" class="hideTheElement">
 							 <?php echo _lang("Category :");?> <a href="<?php echo channel_url($video->category,$video->channel_name);?>" title="<?php echo _html($video->channel_name);?>">
                                 <?php echo _html($video->channel_name);?>
                             </a>

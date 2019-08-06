@@ -11,7 +11,7 @@ if(get_option('imagesmenu') == 1 ) {
 echo '<li class="lihead"><a href="'.site_url().buzz.'"><span class="iconed"><i class="material-icons">&#xE80E;</i></span> '._lang('What\'s up').'</a></li>';
 }
 if(get_option('showplaylists',1) == 1 ) {
-echo '<li class="lihead"><a href="'.site_url().playlistsearch.'/1"><span class="iconed"><i class="material-icons">&#xE05F;</i></span>'._lang('Location').'</a></li>';
+echo '<li class="lihead"><a href="'.site_url().playlistsearch.'/1"><span class="iconed"><i class="material-icons">&#xE05F;</i></span>'._lang('Warehouse').'</a></li>';
 }
 
 if(get_option('showusers',1) == 1 ) {
