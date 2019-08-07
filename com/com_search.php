@@ -88,6 +88,48 @@ else if(not_empty($ntype) && trim($ntype)=="time_range_loc"){
 	
 	$heading = "From : ".$timeArray[0]." to ".$timeArray[1].". <br>Warehouse search string : ".$timeArray[3];	
 	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="ware_door_load"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	$heading = "Warehouse search string : ".$timeArray[2]." / Door No.: ".$timeArray[1]." / Load No.: ".$timeArray[3];	
+	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="ware_load"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	$heading = "Warehouse search string : ".$timeArray[1]." / Load no.:".$timeArray[2];	
+	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="time_range_ware_door_load"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	if(!isset($timeArray[0]) || $timeArray[0]==""){$timeArray[0] = date("Y-m-d H:i:s");}
+	
+	if(!isset($timeArray[1]) || $timeArray[1] == ""){$timeArray[1] = date("Y-m-d H:i:s");}
+	if(!isset($timeArray[2]) || $timeArray[2] == ""){$timeArray[2] = "";}
+	
+	$heading = "From : ".$timeArray[0]." to ".$timeArray[1].". <br>Warehouse search string : ".$timeArray[4]." / Door No.: ".$timeArray[3]." / Load No.: ".$timeArray[5];	
+	//$heading = "YYUYU";	
+}else if(not_empty($ntype) && trim($ntype)=="time_range_ware_load"){
+	//echo $key;
+	$s = $key;
+	$s = str_replace("+" , " " , $s);
+	$timeArray = explode("|",$s);
+	
+	if(!isset($timeArray[0]) || $timeArray[0]==""){$timeArray[0] = date("Y-m-d H:i:s");}
+	
+	if(!isset($timeArray[1]) || $timeArray[1] == ""){$timeArray[1] = date("Y-m-d H:i:s");}
+	if(!isset($timeArray[2]) || $timeArray[2] == ""){$timeArray[2] = "";}
+	
+	$heading = "From : ".$timeArray[0]." to ".$timeArray[1].". <br>Warehouse search string : ".$timeArray[3]." / Load No.: ".$timeArray[4];	
+	//$heading = "YYUYU";	
 }
 else if (not_empty($ntype) && trim($ntype)=="location"){	
 	$heading = _lang('Location : ').ucfirst(str_replace(array("+","-")," ",$key));	
@@ -142,7 +184,11 @@ foreach($or_key as $or){
 		$merged_query .= DB_PREFIX."videos.title like '%".$and."%' OR ";
 		$merged_query .= DB_PREFIX."videos.description like '%".$and."%' OR ";
 		$merged_query .= DB_PREFIX."videos.comment like '%".$and."%' OR ";
-		$merged_query .= "(CONCAT_WS(load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$and%')";		
+		$merged_query .= DB_PREFIX."videos.door like '%".$and."%' OR ";
+		$merged_query .= DB_PREFIX."videos.warehouse like '%".$and."%' OR ";
+		$merged_query .= DB_PREFIX."videos.description like '%".$and."%' OR ";
+		$merged_query .= DB_PREFIX."warehouses.title like '%".$and."%' OR ";
+		$merged_query .= "(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$and%')";		
 		$merged_query .= ")";
 		if($and_count < count($and_key)){
 			//echo ' && ';
@@ -164,7 +210,8 @@ $or_count = $or_count+1;
 
 $options = DB_PREFIX."videos.id,".DB_PREFIX."videos.description,".DB_PREFIX."videos.title, ".DB_PREFIX."videos.date,".DB_PREFIX."videos.user_id,".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.views,".DB_PREFIX."videos.liked,".DB_PREFIX."videos.duration,".DB_PREFIX."videos.nsfw,".DB_PREFIX."videos.start_date_time,".DB_PREFIX."videos.end_date_time,".DB_PREFIX."videos.warehouse,".DB_PREFIX."videos.door,".DB_PREFIX."videos.comment";
  /* If 3 letter word */
- if((strlen($key) < 3) /* || (get_option("searchmode",1) == 1) */) {
+ 
+ if((strlen($key) < 0) /* || (get_option("searchmode",1) == 1) */) {
  $vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos,".DB_PREFIX."warehouses.title as warehouse_title 
  LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
  LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
@@ -197,7 +244,7 @@ $options = DB_PREFIX."videos.id,".DB_PREFIX."videos.description,".DB_PREFIX."vid
 				FROM ".DB_PREFIX."videos 
 				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
 				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE (CONCAT_WS(load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' ) 
+				WHERE (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' ) 
 					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date,load_relevance DESC ".this_limit();
 					
 			break;	
@@ -272,12 +319,57 @@ $options = DB_PREFIX."videos.id,".DB_PREFIX."videos.description,".DB_PREFIX."vid
 					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
 			//die($vq);
 			break;
+			case 'ware_door_load':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+				FROM ".DB_PREFIX."videos 
+				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+				WHERE WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1] AND
+				(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[3]%' )
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'ware_load':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+				FROM ".DB_PREFIX."videos 
+				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+				WHERE WAREHOUSE LIKE '%$timeArray[0]%' AND
+				(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[2]%' )
+
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'time_range_ware_door_load':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+				FROM ".DB_PREFIX."videos 
+				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+					AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3] AND
+					(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[5]%' )
+
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
+			case 'time_range_ware_load':
+			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+				FROM ".DB_PREFIX."videos 
+				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+					AND WAREHOUSE LIKE '%$timeArray[2]%' AND
+					(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[4]%' )
+
+					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
+			//die($vq);
+			break;
 			default:
 			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
 			LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
 			LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
 	WHERE ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".$merged_query." ) 
-	or (CONCAT_WS(load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' )".$interval."
+	or (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' )".$interval."
 	   ORDER BY title ".this_limit();
 			//die($vq);
 			break;

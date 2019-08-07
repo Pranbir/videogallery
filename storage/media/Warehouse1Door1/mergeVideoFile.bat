@@ -1,0 +1,1 @@
+start cmd /c "cd /d C:\XAMPP\htdocs\videogallery\storage\media\Warehouse1Door1\ && python C:\XAMPP\htdocs\videogallery\storage\media\Warehouse1Door1\runBatch.py

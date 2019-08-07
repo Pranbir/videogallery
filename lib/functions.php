@@ -221,7 +221,7 @@ return intval(_get($val));
 }
 function t_copy($text){
 //$text = $text.'<p class="'.strrev('01potm llams').'">'._lang(strrev('yb derewoP')).' <a href="'.strrev("moc.ebivphp.www//").'" target="_blank" title="'.strrev('SMC oediV ebiVPHP').'">'.strrev('etiL ;edart&ebiVPHP').'</a> '.get_option('licto').'</p>';
-$text.='<p class="small mtop10">Powered by <a href="//www.instadatasystems.com" target="_blank" title="InstaData Systems">InstaData Systems</a> | Licensed to InstaData</p>';
+$text.='<p class="small mtop10">Powered by <a href="//www.edgecomputation.com" target="_blank" title="Edge Computation">Edge Computation</a> | Licensed to Edge Computation</p>';
 return $text;
 }
 //return safe POST

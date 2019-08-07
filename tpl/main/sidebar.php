@@ -34,12 +34,14 @@ echo '<li style="display:none;"><a href="'.site_url().me.'/?sk=likes"><span clas
 <li><a href="'.site_url().me.'/?sk=history"><span class="iconed"><i class="material-icons">&#xE889;</i></span> '. _lang('History').'</a> </li>
 <li style="display:none;"><a href="'.site_url().me.'/?sk=later"><span class="iconed"><i class="material-icons">&#xE924;</i></span> '. _lang('Watch Later').'</a> </li>
 ';
-$plays = $cachedb->get_results("SELECT id, title FROM ".DB_PREFIX."playlists where owner= '".user_id()."' and picture not in ('[likes]','[history]','[later]') and ptype < 2 order by title asc limit 0,100");
+$plays = $cachedb->get_results("SELECT ".DB_PREFIX."playlists.id, ".DB_PREFIX."playlists.title, ".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."playlists
+LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."playlists.title = ".DB_PREFIX."warehouses.location
+where owner= '".user_id()."' and picture not in ('[likes]','[history]','[later]') and ptype < 2 order by title asc limit 0,100");
 if($plays) { 
 foreach ($plays as $play) {
 echo '<li>
-<a href="'.playlist_url($play->id, $play->title).'" original-title="'.$play->title.'" title="'.$play->title.'"><i class="material-icons">&#xE05F;</i>
-'._html(_cut($play->title, 24)).'
+<a href="'.playlist_url($play->id, $play->warehouse_title).'" original-title="'.$play->warehouse_title.'" title="'.$play->warehouse_title.'"><i class="material-icons">&#xE05F;</i>
+'._html(_cut($play->warehouse_title, 24)).'
 </a>
 </li>';
 }

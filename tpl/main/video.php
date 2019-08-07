@@ -320,7 +320,9 @@
                                     
                                 }
                                 echo '<br>';
-                                echo 'Comments: '.$video->comment;
+                                if($video->comment){
+                                    echo 'Comments: '.$video->comment;
+                                }
                                 
                             ?>
                             

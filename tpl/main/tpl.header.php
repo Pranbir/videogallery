@@ -337,6 +337,7 @@ $nav.= '<div id="dateTimeWarePickModal" class="modal fade" role="dialog" style="
 			<!-- <label class="col-md-6 col-xs-12"> Location : <input style="background: inherit;" id="dateTimeWarePick_location" type="text" class="form-control"></label> -->
 			<label class="col-md-6 col-xs-12">Warehouse : <select style="background: inherit;" id="dateTimeWarePick_warehouse" class="form-control" > '.$warehouseslist.' </select></label>
 			<label class="col-md-6 col-xs-12">Door : <select style="background: inherit;" id="dateTimeDoorPick_warehouse" class="form-control"> '.$warehouses_doorlist.' </select></label>
+			<label class="col-md-6 col-xs-12">Load Number : <input style="background: inherit;" id="dateTimeWarePick_loadnum" type="text" placeholder="Load Number" class="form-control"></label>
 
 		</div>
       </div>
