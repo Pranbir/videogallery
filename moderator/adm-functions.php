@@ -348,7 +348,7 @@ echo '<div class="msg-warning">User with id #'.$id.' does not exist.</div>';
 }
 }
 function acjs(){
-	$txt = '<p style="display:block; padding-top:10px;">Powered by <a rel="nofollow" href="http://www.instadatasystems.com" target="_blank" title="InstaData Systems">InstaData Systems </a>.</p>';
+	$txt = '<p style="display:block; padding-top:10px;">Powered by <a rel="nofollow" href="http://www.edgecomputation.com" target="_blank" title="Edge Computation">Edge Computation </a>.</p>';
 //$txt = '>p/<.>a/< etiL ebiVPHP>"SMC oediV ebiVphp"=eltit "knalb_"=tegrat "moc.ebivphp.www//:sptth"=ferh "wollofon"=ler a< yb derewoP>";xp01:pot-gniddap ;kcolb:yalpsid"=elyts p<';
 echo $txt;
 //echo strrev($txt);

@@ -1160,15 +1160,30 @@ function generateDateTimeWareSearchValue(){
 	if(startDateVal == "" || endDateVal == "" || startTimeVal == "" || endTimeVal == ""){
 		if($('#dateTimeWarePick_warehouse').val().trim() != ""){
             if($('#dateTimeDoorPick_warehouse').val().trim() != ""){
-                output= $('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
-                $("#searchform > div > div.form-control-wrap > input").val(output);
-                SearchSwitch('ware_door')
-                $('#searchform').submit();
+                if($('#dateTimeWarePick_loadnum').val().trim() != ""){
+                    output= $('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim()+'|'+$('#dateTimeWarePick_loadnum').val().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('ware_door_load')
+                    $('#searchform').submit();
+                }else{
+                    output= $('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('ware_door')
+                    $('#searchform').submit();
+                }
             }else {
-                output= $('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
-                $("#searchform > div > div.form-control-wrap > input").val(output);
-                SearchSwitch('ware')
-                $('#searchform').submit();
+                if($('#dateTimeWarePick_loadnum').val().trim() != ""){
+                    output= $('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim()+'|'+$('#dateTimeWarePick_loadnum').val().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('ware_load')
+                    $('#searchform').submit();
+                }else{
+                    output= $('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('ware')
+                    $('#searchform').submit();
+                }
+                
             }
 		
 		}
@@ -1180,15 +1195,31 @@ function generateDateTimeWareSearchValue(){
 	else{
 		if($('#dateTimeWarePick_warehouse').val().trim() != ""){
             if($('#dateTimeDoorPick_warehouse').val().trim() != ""){
-                output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
-                $("#searchform > div > div.form-control-wrap > input").val(output);
-                SearchSwitch('time_range_ware_door')
-                $('#searchform').submit();
+                if($('#dateTimeWarePick_loadnum').val().trim() != ""){
+                    output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim()+'|'+$('#dateTimeWarePick_loadnum').val().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('time_range_ware_door_load')
+                    $('#searchform').submit();
+                }else{
+                    output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+"|"+$('#dateTimeDoorPick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('time_range_ware_door')
+                    $('#searchform').submit();
+                }
+               
             }else {
-                output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
-                $("#searchform > div > div.form-control-wrap > input").val(output);
-                SearchSwitch('time_range_ware')
-                $('#searchform').submit();
+                if($('#dateTimeWarePick_loadnum').val().trim() != ""){
+                    output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim()+'|'+$('#dateTimeWarePick_loadnum').val().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('time_range_ware_load')
+                    $('#searchform').submit();
+                }else{
+                    output= startDateVal+" "+startTimeVal+":00|"+endDateVal+" "+endTimeVal+":00|"+$('#dateTimeWarePick_warehouse').val().trim()+'|'+$("#dateTimeWarePick_warehouse option:selected").html().trim();
+                    $("#searchform > div > div.form-control-wrap > input").val(output);
+                    SearchSwitch('time_range_ware')
+                    $('#searchform').submit();
+                }
+                
             }
 		
 		}
@@ -1467,4 +1498,10 @@ $('#dateTimePick_startDate').change( function(e){
 });
 $('#dateTimePick_endDate').change( function(e){
 	$('#dateTimePick_endTime').val('23:59');
+});
+$('#dateTimeWarePick_startDate').change( function(e){
+	$('#dateTimeWarePick_startTime').val('00:00');
+});
+$('#dateTimeWarePick_endDate').change( function(e){
+	$('#dateTimeWarePick_endTime').val('23:59');
 });

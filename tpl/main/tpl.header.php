@@ -180,13 +180,13 @@ $nav .= '> <div class="search-holder">
 					<input type="text" id="switch-com" class="hide" name="component" value ="video">                
 					<ul class="dropdown-menu dropdown-left bullet" role="menu">
 					<li role="presentation"><a id="s-video" href="javascript:SearchSwitch(\'video\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Any").'</a></li>
-					
+	<!--				
 					<li role="presentation"><a id="s-location" href="javascript:SearchSwitch(\'location\')"><i class="icon material-icons">&#xE55A;</i>'._lang("Location").'</a></li>
-					
+	-->				
 					<li role="presentation"><a id="s-load" href="javascript:SearchSwitch(\'load\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Load Number").'</a></li>
-					
+	<!--				
 					<li role="presentation"><a id="s-item" href="javascript:SearchSwitch(\'item\')"><i class="icon material-icons">&#xE63A;</i>'._lang("Item Number").'</a></li>
-					
+	-->				
 					<li role="presentation"><a id="s-comment" href="javascript:SearchSwitch(\'comment\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Comment").'</a></li>
 					<!--
 					<li role="presentation"><a id="s-time_range" href="javascript:SearchSwitch(\'time_range\')"><i class="icon material-icons">&#xE05F;</i>'._lang("Time range").'</a></li>
@@ -337,6 +337,7 @@ $nav.= '<div id="dateTimeWarePickModal" class="modal fade" role="dialog" style="
 			<!-- <label class="col-md-6 col-xs-12"> Location : <input style="background: inherit;" id="dateTimeWarePick_location" type="text" class="form-control"></label> -->
 			<label class="col-md-6 col-xs-12">Warehouse : <select style="background: inherit;" id="dateTimeWarePick_warehouse" class="form-control" > '.$warehouseslist.' </select></label>
 			<label class="col-md-6 col-xs-12">Door : <select style="background: inherit;" id="dateTimeDoorPick_warehouse" class="form-control"> '.$warehouses_doorlist.' </select></label>
+			<label class="col-md-6 col-xs-12">Load Number : <input style="background: inherit;" id="dateTimeWarePick_loadnum" type="text" placeholder="Load Number" class="form-control"></label>
 
 		</div>
       </div>

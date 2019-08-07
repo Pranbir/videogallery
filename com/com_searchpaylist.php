@@ -6,13 +6,16 @@ $key = str_replace(array("-","+")," ",$key);
 
 $pl_heading = '';
 if($key == 1){
-    $pl_heading = _lang('Playlists by').' '.'Locations';
+    $pl_heading = _lang('Playlists by').' '.'Warehouse';
 }else if($key == 2){
     $pl_heading = _lang('Playlists by').' '.'Date of Recording';
 }
 $heading = $pl_heading;
 $count = $db->get_row("Select count(*) as nr from ".DB_PREFIX."playlists WHERE (type like '%" .$key. "%' or description like '%" .$key. "%' ) and (picture not in ('[likes]','[history]','[later]') or picture is null and ptype <> 2)");
-$playlists = $db->get_results("select ".DB_PREFIX."playlists.*, ".DB_PREFIX."users.name as user from ".DB_PREFIX."playlists LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."playlists.owner = ".DB_PREFIX."users.id WHERE (".DB_PREFIX."playlists.type like '%" .$key. "%' or ".DB_PREFIX."playlists.description like '%" .$key. "%' ) and (".DB_PREFIX."playlists.picture not in ('[likes]','[history]','[later]') or ".DB_PREFIX."playlists.picture is null) and (".DB_PREFIX."playlists.ptype <> 2) order by views DESC ".this_limit()."");
+$playlists = $db->get_results("select ".DB_PREFIX."playlists.*, ".DB_PREFIX."users.name as user,
+".DB_PREFIX."warehouses.title from ".DB_PREFIX."playlists LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."playlists.owner = ".DB_PREFIX."users.id
+JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."playlists.title = ".DB_PREFIX."warehouses.location
+WHERE (".DB_PREFIX."playlists.type like '%" .$key. "%' or ".DB_PREFIX."playlists.description like '%" .$key. "%' ) and (".DB_PREFIX."playlists.picture not in ('[likes]','[history]','[later]') or ".DB_PREFIX."playlists.picture is null) and (".DB_PREFIX."playlists.ptype <> 2) order by views DESC ".this_limit()."");
 
 /*
 $count = $db->get_row("Select count(*) as nr from ".DB_PREFIX."playlists WHERE (title like '%" .$key. "%' or description like '%" .$key. "%' ) and (picture not in ('[likes]','[history]','[later]') or picture is null and ptype <> 2)");
