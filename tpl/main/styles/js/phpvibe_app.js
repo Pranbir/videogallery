@@ -1323,9 +1323,9 @@ function getVideoTimeline(){
             // console.log("st: ",st,"et: ",et);
 
             var sdate = new Date(st );
-            var shour = sdate.getHours();
-            var smin = sdate.getMinutes();
-            var ssecs = sdate.getSeconds();
+            var shour = (sdate.getHours() < 10) ? "0"+sdate.getHours() : sdate.getHours();
+            var smin = (sdate.getMinutes() < 10) ? "0"+sdate.getMinutes() : sdate.getMinutes();
+            var ssecs = (sdate.getSeconds() < 10) ? "0"+sdate.getSeconds() : sdate.getSeconds();
             st = shour+":"+smin+":"+ssecs;
             // alert("hi");
             // console.log("st: ",st);
@@ -1333,9 +1333,9 @@ function getVideoTimeline(){
             $("#start-time").val(st);
 
             var edate = new Date(et );
-            var ehour = edate.getHours();
-            var emin = edate.getMinutes();
-            var esecs = edate.getSeconds();
+            var ehour = (edate.getHours() < 10 ) ? "0"+edate.getHours() : edate.getHours();
+            var emin = (edate.getMinutes() < 10) ? "0"+edate.getMinutes() : edate.getMinutes();
+            var esecs = (edate.getSeconds() < 10) ? "0"+edate.getSeconds() : edate.getSeconds();
             et = ehour+":"+emin+":"+esecs;
             $("#end-time").val(et);
             // console.log("st: ",st,"et: ",et);
