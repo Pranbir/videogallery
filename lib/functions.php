@@ -676,6 +676,27 @@ echo '<div id="videoShareModal" class="modal fade" role="dialog" style="top: 50p
 </div>';
 
 echo '<div id="customDownloadModal" class="modal fade" role="dialog" style="top: 50px;">
+
+<div id="overlay" style="
+    display: none;
+    position:absolute;
+    background: #423e3e;
+    opacity: 0.1;
+    top: 5%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    bottom: 0;
+"> 
+</div>
+
+<div class="cp-spinner cp-flip" id="spin" style="
+    display: none;
+    z-index: 5;
+    position: absolute;
+    left: 50%;
+"></div>
+
   <div class="modal-dialog">
 
     <!-- Modal content-->
