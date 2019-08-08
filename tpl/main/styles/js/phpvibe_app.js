@@ -1268,6 +1268,9 @@ function download_file(fileURL, fileName) {
         _window.document.execCommand('SaveAs', true, fileName || fileURL)
         _window.close();
     }
+
+    $("#customDownloadModal #overlay").hide();
+    $("#customDownloadModal #spin").hide();
 }
 //TEST CODE END
 
@@ -1320,9 +1323,9 @@ function getVideoTimeline(){
             // console.log("st: ",st,"et: ",et);
 
             var sdate = new Date(st );
-            var shour = sdate.getHours();
-            var smin = sdate.getMinutes();
-            var ssecs = sdate.getSeconds();
+            var shour = (sdate.getHours() < 10) ? "0"+sdate.getHours() : sdate.getHours();
+            var smin = (sdate.getMinutes() < 10) ? "0"+sdate.getMinutes() : sdate.getMinutes();
+            var ssecs = (sdate.getSeconds() < 10) ? "0"+sdate.getSeconds() : sdate.getSeconds();
             st = shour+":"+smin+":"+ssecs;
             // alert("hi");
             // console.log("st: ",st);
@@ -1330,9 +1333,9 @@ function getVideoTimeline(){
             $("#start-time").val(st);
 
             var edate = new Date(et );
-            var ehour = edate.getHours();
-            var emin = edate.getMinutes();
-            var esecs = edate.getSeconds();
+            var ehour = (edate.getHours() < 10 ) ? "0"+edate.getHours() : edate.getHours();
+            var emin = (edate.getMinutes() < 10) ? "0"+edate.getMinutes() : edate.getMinutes();
+            var esecs = (edate.getSeconds() < 10) ? "0"+edate.getSeconds() : edate.getSeconds();
             et = ehour+":"+emin+":"+esecs;
             $("#end-time").val(et);
             // console.log("st: ",st,"et: ",et);
@@ -1366,21 +1369,27 @@ function getVideoTimeline(){
 function getDuration(start, old){
     var result;
 
-    var startDate = new Date("July 21, 1983 " + start);
-    var oldDate = new Date("July 21, 1983 " + old);
+    var startDate = new Date("July 21, 1983 "+old);
+    var startDateTime = startDate.getTime();
+    var newDate = new Date("July 21, 1983 "+start);
+    var newDateTime = newDate.getTime();
+    var diffTime = newDateTime - startDateTime;
 
-    // alert(startDate.getHours());   
- 
-    var hr = (startDate.getHours() - oldDate.getHours());
-    var mm = startDate.getMinutes() - oldDate.getMinutes();
-    var ss = startDate.getSeconds() - oldDate.getSeconds();
+    var tempDate = new Date("July 21, 1983");
+    var tempDateTime = tempDate.getTime();
 
-    hr = (hr<10) ? "0"+hr : hr;
-    mm = (mm<10) ? "0"+mm : mm;
-    ss = (ss<10) ? "0"+ss : ss;
+    var actualDiff = tempDateTime + diffTime;
+    var actualDate = new Date(actualDiff);
 
+    var hdiff = actualDate.getHours();
+    var mdiff = actualDate.getMinutes();
+    var sdiff = actualDate.getSeconds();
 
-    result = ""+hr+":"+mm+":"+ss;
+    hdiff = (hdiff < 10) ? "0"+hdiff : hdiff;
+    mdiff = (mdiff < 10) ? "0"+mdiff : mdiff;
+    sdiff = (sdiff < 10) ? "0"+sdiff : sdiff;
+
+    result = ""+hdiff+":"+mdiff+":"+sdiff;
     return result;
 }
 
@@ -1397,7 +1406,11 @@ function cropVideo(){
         alert("Please enter valid end time!");
     } else if(st==et){
         alert("Start time and end time should not be same.");
-    }else if(st>et){
+    } else if(st < oldStTime || et < oldStTime){
+        alert("Start time - End time should not be less than Video Start Time ("+oldStTime+").");
+    } else if(st > oldEtTime || et > oldEtTime){
+        alert("Start time - End time should not be greater than Video End Time ("+oldEtTime+").");
+    } else if(st>et){
         alert("End time should not be less than start time.");
     } else{
         // alert("start time - end time are: "+st+" -> "+et);
@@ -1405,15 +1418,19 @@ function cropVideo(){
         var videoStart = getDuration(st,oldStTime);
         var videoEnd = getDuration(et,oldStTime);
 
-        alert("start time - end time are: "+videoStart+" -> "+videoEnd);
+        // alert("start time - end time are: "+videoStart+" -> "+videoEnd);
 
         let vidLink;
         if($('#jp_video_0').length == 1) {      
             vidLink = $('#jp_video_0').attr('src');
+            $("#customDownloadModal #overlay").show();
+            $("#customDownloadModal #spin").show();
             crop_download_file(vidLink, videoStart, videoEnd);
         }
         else if ($("#video-setup > div.jw-media.jw-reset > video").length == 1){
             vidLink = $("#video-setup > div.jw-media.jw-reset > video").attr('src');
+            $("#customDownloadModal #overlay").show();
+            $("#customDownloadModal #spin").show();
             crop_download_file(vidLink, videoStart, videoEnd);
         }
         else{
