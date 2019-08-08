@@ -616,6 +616,117 @@ $btnc = "btn btn-primary ";
 echo '<a id="shareVideoButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:shareVideo()" title="'._lang('Share the video').'">'._lang('Share').'</a>';
 echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Full Download').'</a>';
 echo '<a id="customDownloadVButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:customDownloadVideo()" title="'._lang('Custom download video').'">'._lang('Custom download').'</a>';
+
+echo '<div id="videoShareModal" class="modal fade" role="dialog" style="top: 50px;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Share video</h4>
+      </div>
+      <div class="modal-body" style="background: #15254c;">
+        <div class="form-group row">
+			<label class="col-md-6 col-xs-12">Share with :
+				<select style="background: inherit;" id="shareType" class="form-control" >
+					<option value="int_user">Internal User</option>
+					<option value="ext_user">External User</option>
+				</select>
+			</label>
+<label id="intUserLabel" class="col-md-6 col-xs-12">Select User :
+				<select style="background: inherit;" id="intUserVal" class="form-control" >
+					<option value="1">User 1</option>
+					<option value="2">User 2</option>
+				</select>
+			</label>
+<label id="extUserLabel" class="col-md-6 col-xs-12" style="display:none;">Enter email :
+<input type="email" class="form-control" style="background: inherit;" id="extUserVal"/>
+				</label>
+
+			
+		</div>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-success legitRipple" onClick="alert(\' Work in Progress. \');" >Submit</button>
+        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
+
+echo '<div id="customDownloadModal" class="modal fade" role="dialog" style="top: 50px;">
+
+<div id="overlay" style="
+    display: none;
+    position:absolute;
+    background: #423e3e;
+    opacity: 0.1;
+    top: 5%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    bottom: 0;
+"> 
+</div>
+
+<div class="cp-spinner cp-flip" id="spin" style="
+    display: none;
+    z-index: 5;
+    position: absolute;
+    left: 50%;
+"></div>
+
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Crop Video<span id="duration" style="font-size:12px;"></span></h4>
+      </div>
+      <div class="modal-body" style="background: #15254c;">
+		<div class="form-group row" style="margin-top: 20px;">
+
+			<div id="input-holder"></div>
+
+			<!-- <label class="col-md-6 col-xs-12">Start time:
+				<input class="without" type="time" name="start-time" id="start-time" step="1">
+			</label>
+
+			<label id="intUserLabel" class="col-md-6 col-xs-12">End time:
+				<input class="without" type="time" name="end-time" id="end-time" step="1">
+			</label> -->
+
+			<!--
+			<div id="start-time">
+				<label class="col-md-6 col-xs-12">Start time:
+					<input type="text" name="start-time-hr" class="hr" maxlength="2" size="2" value="00"> : 
+					<input type="text" name="start-time-mm" class="mm" maxlength="2" size="2" value="00"> :  
+					<input type="text" name="start-time-ss" class="ss" maxlength="2" size="2" value="00">
+					<br><div style="margin-left: 71px;">hr:mm:ss</div> 
+				</label>
+			</div>
+
+			<div id="end-time"></label>
+				<label class="col-md-6 col-xs-12">End time:
+					<input type="text" name="end-time-hr" class="hr" maxlength="2" size="2" value="00"> : 
+					<input type="text" name="end-time-mm" class="mm" maxlength="2" size="2" value="00"> :  
+					<input type="text" name="end-time-ss" class="ss" maxlength="2" size="2" value="00">
+					<br><div style="margin-left: 71px;">hr:mm:ss</div> 
+			</div>  -->
+
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-default" onClick="cropVideo();">Download</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
+
 } else {
 //You are, but can unsubscribe
 //$btnc = "btn btn-default subscriber";
@@ -624,6 +735,117 @@ $btnc = "btn btn-primary";
 echo '<a id="shareVideoButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:shareVideo()" title="'._lang('Share the video').'">'._lang('Share').'</a>';
 echo '<a id="downloadVideoButton" class="'.$btnc.' pv_tip" style= "background: #011033;" href="javascript:downloadVideo()" title="'._lang('Download the video').'">'._lang('Full Download').'</a>';
 echo '<a id="customDownloadVButton" class="'.$btnc.' pv_tip" style= "background: #013133;" href="javascript:customDownloadVideo()" title="'._lang('Custom download video').'">'._lang('Custom download').'</a>';
+
+echo '<div id="videoShareModal" class="modal fade" role="dialog" style="top: 50px;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Share video</h4>
+      </div>
+      <div class="modal-body" style="background: #15254c;">
+        <div class="form-group row">
+			<label class="col-md-6 col-xs-12">Share with :
+				<select style="background: inherit;" id="shareType" class="form-control" >
+					<option value="int_user">Internal User</option>
+					<option value="ext_user">External User</option>
+				</select>
+			</label>
+<label id="intUserLabel" class="col-md-6 col-xs-12">Select User :
+				<select style="background: inherit;" id="intUserVal" class="form-control" >
+					<option value="1">User 1</option>
+					<option value="2">User 2</option>
+				</select>
+			</label>
+<label id="extUserLabel" class="col-md-6 col-xs-12" style="display:none;">Enter email :
+<input type="email" class="form-control" style="background: inherit;" id="extUserVal"/>
+				</label>
+
+			
+		</div>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-success legitRipple" onClick="alert(\' Work in Progress. \');" >Submit</button>
+        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
+
+echo '<div id="customDownloadModal" class="modal fade" role="dialog" style="top: 50px;">
+
+<div id="overlay" style="
+    display: none;
+    position:absolute;
+    background: #423e3e;
+    opacity: 0.1;
+    top: 5%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    bottom: 0;
+"> 
+</div>
+
+<div class="cp-spinner cp-flip" id="spin" style="
+    display: none;
+    z-index: 5;
+    position: absolute;
+    left: 50%;
+"></div>
+
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Crop Video<span id="duration" style="font-size:12px;"></span></h4>
+      </div>
+      <div class="modal-body" style="background: #15254c;">
+		<div class="form-group row" style="margin-top: 20px;">
+
+			<div id="input-holder"></div>
+
+			<!-- <label class="col-md-6 col-xs-12">Start time:
+				<input class="without" type="time" name="start-time" id="start-time" step="1">
+			</label>
+
+			<label id="intUserLabel" class="col-md-6 col-xs-12">End time:
+				<input class="without" type="time" name="end-time" id="end-time" step="1">
+			</label> -->
+
+			<!--
+			<div id="start-time">
+				<label class="col-md-6 col-xs-12">Start time:
+					<input type="text" name="start-time-hr" class="hr" maxlength="2" size="2" value="00"> : 
+					<input type="text" name="start-time-mm" class="mm" maxlength="2" size="2" value="00"> :  
+					<input type="text" name="start-time-ss" class="ss" maxlength="2" size="2" value="00">
+					<br><div style="margin-left: 71px;">hr:mm:ss</div> 
+				</label>
+			</div>
+
+			<div id="end-time"></label>
+				<label class="col-md-6 col-xs-12">End time:
+					<input type="text" name="end-time-hr" class="hr" maxlength="2" size="2" value="00"> : 
+					<input type="text" name="end-time-mm" class="mm" maxlength="2" size="2" value="00"> :  
+					<input type="text" name="end-time-ss" class="ss" maxlength="2" size="2" value="00">
+					<br><div style="margin-left: 71px;">hr:mm:ss</div> 
+			</div>  -->
+
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-default" onClick="cropVideo();">Download</button>
+      </div>
+    </div>
+
+  </div>
+</div>';
+
 }
 } else {
 	

@@ -1327,7 +1327,6 @@ function getVideoTimeline(){
             var smin = (sdate.getMinutes() < 10) ? "0"+sdate.getMinutes() : sdate.getMinutes();
             var ssecs = (sdate.getSeconds() < 10) ? "0"+sdate.getSeconds() : sdate.getSeconds();
             st = shour+":"+smin+":"+ssecs;
-            // alert("hi");
             // console.log("st: ",st);
 
             $("#start-time").val(st);
@@ -1356,7 +1355,9 @@ function getVideoTimeline(){
             $("#duration").text(' (original duration: '+st+' - '+et+')');
             oldStTime =st;
             oldEtTime =et;
-
+          }
+          else{
+            alert("no data");
           }
       },  
       error: function(xhr,status,error){
