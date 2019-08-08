@@ -8,7 +8,14 @@ $seened = $video->id;
 $seened = rtrim($seened, ",");
 $noseen = "AND ".DB_PREFIX."videos.id not in (".$seened.")";
 if(get_option('RelatedSource','0') == 1) {
-$result = $cachedb->get_results("SELECT ".DB_PREFIX."videos.title,".DB_PREFIX."videos.id as vid,".DB_PREFIX."videos.thumb, ".DB_PREFIX."videos.views,".DB_PREFIX."videos.duration,".DB_PREFIX."users.name, ".DB_PREFIX."users.id as owner, ".DB_PREFIX."users.group_id  FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id where ".DB_PREFIX."videos.category ='".$video->category."' and ".DB_PREFIX."videos.pub > 0 ".$noseen." and ".DB_PREFIX."videos.media = '".$video->media."'  ORDER BY ".DB_PREFIX."videos.id DESC limit 0,".get_option('related-nr')." ");
+	if($_SESSION['group'] == 1){
+		$result = $cachedb->get_results("SELECT ".DB_PREFIX."videos.title,".DB_PREFIX."videos.id as vid,".DB_PREFIX."videos.thumb, ".DB_PREFIX."videos.views,".DB_PREFIX."videos.duration,".DB_PREFIX."users.name, ".DB_PREFIX."users.id as owner, ".DB_PREFIX."users.group_id  FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id where 
+		".DB_PREFIX."videos.category ='".$video->category."' and ".DB_PREFIX."videos.pub > 0 ".$noseen." and ".DB_PREFIX."videos.media = '".$video->media."'  ORDER BY ".DB_PREFIX."videos.id DESC limit 0,".get_option('related-nr')." ");
+	}else{
+		$result = $cachedb->get_results("SELECT ".DB_PREFIX."videos.title,".DB_PREFIX."videos.id as vid,".DB_PREFIX."videos.thumb, ".DB_PREFIX."videos.views,".DB_PREFIX."videos.duration,".DB_PREFIX."users.name, ".DB_PREFIX."users.id as owner, ".DB_PREFIX."users.group_id  FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id where 
+		(".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and ".DB_PREFIX."videos.category ='".$video->category."' and ".DB_PREFIX."videos.pub > 0 ".$noseen." and ".DB_PREFIX."videos.media = '".$video->media."'  ORDER BY ".DB_PREFIX."videos.id DESC limit 0,".get_option('related-nr')." ");
+	}
+	
 } else {
 $pieces = array_filter(explode(" ",removeCommonWords($video->title)));
 $pieces2 = array_filter(explode(",",removeCommonWords($video->tags)));
@@ -26,10 +33,19 @@ $par[] = $p;
 }	
 $key = 	toDb(implode(",",$par));
 $options = DB_PREFIX."videos.id as vid,".DB_PREFIX."videos.title,".DB_PREFIX."videos.user_id as owner,".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.views,".DB_PREFIX."videos.duration";
-$vq = "select ".$options.", ".DB_PREFIX."users.name , ".DB_PREFIX."users.group_id ,
-MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
-MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-	WHERE MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 AND ".DB_PREFIX."videos.media = '".$video->media."' ".$noseen." ORDER by title_relevance DESC,relevance DESC limit 0,".get_option('related-nr',12)." ";
+if($_SESSION['group'] == 1){
+	$vq = "select ".$options.", ".DB_PREFIX."users.name , ".DB_PREFIX."users.group_id ,
+	MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
+	MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		WHERE MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 AND ".DB_PREFIX."videos.media = '".$video->media."' ".$noseen." ORDER by title_relevance DESC,relevance DESC limit 0,".get_option('related-nr',12)." ";
+	
+}else{
+	$vq = "select ".$options.", ".DB_PREFIX."users.name , ".DB_PREFIX."users.group_id ,
+	MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
+	MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 AND ".DB_PREFIX."videos.media = '".$video->media."' ".$noseen." ORDER by title_relevance DESC,relevance DESC limit 0,".get_option('related-nr',12)." ";
+	
+}
 	$result = $cachedb->get_results($vq);
 }
 $firstseen = false;

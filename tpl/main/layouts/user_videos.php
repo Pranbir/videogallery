@@ -1,6 +1,14 @@
 <?php 
 $options = DB_PREFIX."videos.id as vid,".DB_PREFIX."videos.title,".DB_PREFIX."videos.views,".DB_PREFIX."videos.liked,".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.duration";
-$uresult =$db->get_results("select ".$options." FROM ".DB_PREFIX."videos WHERE ".DB_PREFIX."videos.user_id='".$video->user_id."' and ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() ORDER BY ".DB_PREFIX."videos.id DESC ".this_offset(get_option('related-nr',12)));
+if($_SESSION['group'] == 1){
+	$uresult =$db->get_results("select ".$options." FROM ".DB_PREFIX."videos WHERE 
+	".DB_PREFIX."videos.user_id='".$video->user_id."' and ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() ORDER BY ".DB_PREFIX."videos.id DESC ".this_offset(get_option('related-nr',12)));
+	
+}else{
+	$uresult =$db->get_results("select ".$options." FROM ".DB_PREFIX."videos WHERE 
+	(".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and ".DB_PREFIX."videos.user_id='".$video->user_id."' and ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() ORDER BY ".DB_PREFIX."videos.id DESC ".this_offset(get_option('related-nr',12)));
+	
+}
  if ($uresult) {
 	foreach ($uresult as $uvids) {
 $duration = ($uvids->duration > 0) ? video_time($uvids->duration) : '<i class="icon-picture"></i>';		

@@ -1,12 +1,22 @@
 <?php $list = _get('list');
 $options = DB_PREFIX."videos.id as vid,".DB_PREFIX."videos.title,".DB_PREFIX."videos.user_id as owner, ".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.duration";
 if(intval($list) > 0) {
-$result =$db->get_results("select ".$options.", ".DB_PREFIX."users.name as name 
-FROM ".DB_PREFIX."playlist_data
-LEFT JOIN ".DB_PREFIX."videos ON ".DB_PREFIX."playlist_data.video_id = ".DB_PREFIX."videos.id
-LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id
-WHERE ".DB_PREFIX."playlist_data.playlist =  '".$list."' group by ".DB_PREFIX."playlist_data.video_id
-ORDER BY ".DB_PREFIX."playlist_data.id DESC ".this_offset(get_option('related-nr')));
+	if($_SESSION['group'] == 1){
+		$result =$db->get_results("select ".$options.", ".DB_PREFIX."users.name as name 
+		FROM ".DB_PREFIX."playlist_data
+		LEFT JOIN ".DB_PREFIX."videos ON ".DB_PREFIX."playlist_data.video_id = ".DB_PREFIX."videos.id
+		LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id
+		WHERE ".DB_PREFIX."playlist_data.playlist =  '".$list."' group by ".DB_PREFIX."playlist_data.video_id
+		ORDER BY ".DB_PREFIX."playlist_data.id DESC ".this_offset(get_option('related-nr')));
+	}else{
+		$result =$db->get_results("select ".$options.", ".DB_PREFIX."users.name as name 
+		FROM ".DB_PREFIX."playlist_data
+		LEFT JOIN ".DB_PREFIX."videos ON ".DB_PREFIX."playlist_data.video_id = ".DB_PREFIX."videos.id
+		LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id
+		WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and ".DB_PREFIX."playlist_data.playlist =  '".$list."' group by ".DB_PREFIX."playlist_data.video_id
+		ORDER BY ".DB_PREFIX."playlist_data.id DESC ".this_offset(get_option('related-nr')));
+	}
+	
 } else {
 if(strpos(_get('list'), 'ums-') !== false) { $md = "> 1";}
 if(strpos(_get('list'), 'uvs-') !== false) {$md = "< 2"; }

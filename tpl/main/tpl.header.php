@@ -236,7 +236,7 @@ $nav .= '<a id="openusr" class="btn uav btn-small dropdown-toggle"  data-toggle=
 data-animation="scale-up" role="button" title="'._lang('Dashboard').'">	
 <img data-name="'.addslashes(user_name()).'" src="'.thumb_fix(user_avatar(), true, 35,35).'" /> 
 </a>
-<ul class="dropdown-menu dropdown-left" '.$force_left_.' role="menu">
+<ul class="dropdown-menu dropdown-left" role="menu">
 <li role="presentation" class="drop-head">'.group_creative(user_group()).' <a href="'.profile_url(user_id(), user_name()).'"> '.user_name().' </a>
 ';
 
