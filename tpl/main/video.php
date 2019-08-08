@@ -39,12 +39,15 @@
     </div>
     <?php if(has_list()){  ?>
     <div id="LH" class="row nomargin">
+        <!--
         <div class="playlistvibe">
             <div class="cute">
                 <h1>
-                    <?php  echo _html('Now playing:'); ?>
+                    <?php//  echo _html('Now playing:');
+                     ?>
                     <span>
-                        <?php  echo _html(_cut(list_title(_get('list')),260));?>
+                        <?php//  echo _html(_cut(list_title(_get('list')),260));
+                        ?>
                     </span>
                 </h1>
                 <div class="cute-line"></div>
@@ -60,6 +63,7 @@
                 <i class="material-icons">&#xE047;</i></a>
             </div>
         </div>
+        -->
     </div>
 	</div>
     <?php } ?>
