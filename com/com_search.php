@@ -1,7 +1,7 @@
 <?php  //Global query options
 $key = toDb(token());
-$key = stripslashes($key);
-die($key);
+//$key = stripslashes($key);
+//die($key);
 //error_reporting(1);
 $ntype = _get('type');
 
