@@ -1,5 +1,7 @@
 <?php  //Global query options
 $key = toDb(token());
+$key = stripslashes($key);
+die($key);
 //error_reporting(1);
 $ntype = _get('type');
 
@@ -208,194 +210,457 @@ $or_count = $or_count+1;
 }
 //echo $merged_query;
 
-$options = DB_PREFIX."videos.id,".DB_PREFIX."videos.description,".DB_PREFIX."videos.title, ".DB_PREFIX."videos.date,".DB_PREFIX."videos.user_id,".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.views,".DB_PREFIX."videos.liked,".DB_PREFIX."videos.duration,".DB_PREFIX."videos.nsfw,".DB_PREFIX."videos.start_date_time,".DB_PREFIX."videos.end_date_time,".DB_PREFIX."videos.warehouse,".DB_PREFIX."videos.door,".DB_PREFIX."videos.comment";
+$options = DB_PREFIX."videos.id,".DB_PREFIX."videos.description,".DB_PREFIX."videos.title, ".DB_PREFIX."videos.date,".DB_PREFIX."videos.user_id,".DB_PREFIX."videos.thumb,".DB_PREFIX."videos.views,".DB_PREFIX."videos.liked,".DB_PREFIX."videos.duration,".DB_PREFIX."videos.nsfw,".DB_PREFIX."videos.start_date_time,".DB_PREFIX."videos.end_date_time,".DB_PREFIX."videos.warehouse,".DB_PREFIX."videos.door,".DB_PREFIX."videos.comment,".DB_PREFIX."videos.groupid";
  /* If 3 letter word */
  
- if((strlen($key) < 0) /* || (get_option("searchmode",1) == 1) */) {
- $vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos,".DB_PREFIX."warehouses.title as warehouse_title 
- LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
- LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
- WHERE ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".DB_PREFIX."videos.title like '%".$key."%' or ".DB_PREFIX."videos.title like '%".$nkey."%' or ".DB_PREFIX."videos.title like '%".$mkey."%' or ".DB_PREFIX."videos.description like '%".$key."%' or ".DB_PREFIX."videos.tags like '%".$key."%' ) ".$interval."
-	   ORDER BY CASE WHEN ".DB_PREFIX."videos.title like '" .$key. "%' THEN 0
-	           WHEN ".DB_PREFIX."videos.title like '%" .$key. "%' THEN 1
-	           WHEN ".DB_PREFIX."videos.tags like '" .$key. "%' THEN 2
-               WHEN ".DB_PREFIX."videos.tags like '%" .$key. "%' THEN 3		   
-               WHEN ".DB_PREFIX."videos.description like '%" .$key. "%' THEN 4
-			   WHEN ".DB_PREFIX."videos.tags like '%" .$key. "%' THEN 5
-               ELSE 6
-          END, title ".this_limit();
- } else {
-	 
-		//############################
-		if(not_empty($ntype)){
-			switch (trim($ntype)) {
-			case 'location':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
-				MATCH (location) AGAINST ('".$key."' IN BOOLEAN MODE) AS location_relevance,".DB_PREFIX."warehouses.title as warehouse_title 
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE LOCATION LIKE '%$key%'
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date,location_relevance DESC ".this_limit();
-			break;	
-			case 'load':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
-				MATCH (load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) AGAINST ('".$key."' IN BOOLEAN MODE) AS load_relevance,".DB_PREFIX."warehouses.title as warehouse_title 
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' ) 
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date,load_relevance DESC ".this_limit();
-					
-			break;	
-			case 'item':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos 
-			LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-			LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-			WHERE item LIKE '%$key%' AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			break;
-			case 'comment':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
-				MATCH (comment) AGAINST ('".$key."' IN BOOLEAN MODE) AS comment_relevance,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE comment LIKE '%$key%'
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date,comment_relevance DESC ".this_limit();
-			break;
-			case 'time_range':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]' 
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'time_range_loc':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
-					AND LOCATION LIKE '%$timeArray[2]%'
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'ware_door':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1]
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'ware':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE WAREHOUSE LIKE '%$timeArray[0]%'
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'time_range_ware_door':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
-					AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3]
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'time_range_ware':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
-					AND WAREHOUSE LIKE '%$timeArray[2]%'
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'ware_door_load':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1] AND
-				(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[3]%' )
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'ware_load':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE WAREHOUSE LIKE '%$timeArray[0]%' AND
-				(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[2]%' )
 
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'time_range_ware_door_load':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
-					AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3] AND
-					(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[5]%' )
-
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			case 'time_range_ware_load':
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
-				FROM ".DB_PREFIX."videos 
-				LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-				LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-				WHERE start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
-					AND WAREHOUSE LIKE '%$timeArray[2]%' AND
-					(CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[4]%' )
-
-					AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by ".DB_PREFIX."videos.date ".this_limit();
-			//die($vq);
-			break;
-			default:
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
-			LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-			LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
-	WHERE ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".$merged_query." ) 
-	or (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' )".$interval."
-	   ORDER BY title ".this_limit();
-			//die($vq);
-			break;
-				
-			}
+ if($_SESSION['group'] == 1){
+	if((strlen($key) < 0) /* || (get_option("searchmode",1) == 1) */) {
+		$vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos,".DB_PREFIX."warehouses.title as warehouse_title 
+		LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+		WHERE (".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".DB_PREFIX."videos.title like '%".$key."%' or ".DB_PREFIX."videos.title like '%".$nkey."%' or ".DB_PREFIX."videos.title like '%".$mkey."%' or ".DB_PREFIX."videos.description like '%".$key."%' or ".DB_PREFIX."videos.tags like '%".$key."%' ) ".$interval."
+		)
+			  ORDER BY CASE WHEN ".DB_PREFIX."videos.title like '" .$key. "%' THEN 0
+					  WHEN ".DB_PREFIX."videos.title like '%" .$key. "%' THEN 1
+					  WHEN ".DB_PREFIX."videos.tags like '" .$key. "%' THEN 2
+					  WHEN ".DB_PREFIX."videos.tags like '%" .$key. "%' THEN 3		   
+					  WHEN ".DB_PREFIX."videos.description like '%" .$key. "%' THEN 4
+					  WHEN ".DB_PREFIX."videos.tags like '%" .$key. "%' THEN 5
+					  ELSE 6
+				 END, title ".this_limit();
+		} else {
 			
+			   //############################
+			   if(not_empty($ntype)){
+				   switch (trim($ntype)) {
+				   case 'location':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+					   MATCH (location) AGAINST ('".$key."' IN BOOLEAN MODE) AS location_relevance,".DB_PREFIX."warehouses.title as warehouse_title 
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (LOCATION LIKE '%$key%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date,location_relevance DESC ".this_limit();
+				   break;	
+				   case 'load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+					   MATCH (load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) AGAINST ('".$key."' IN BOOLEAN MODE) AS load_relevance,".DB_PREFIX."warehouses.title as warehouse_title 
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE ((CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' ) 
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date,load_relevance DESC ".this_limit();
+						   
+				   break;	
+				   case 'item':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos 
+				   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+				   WHERE (item LIKE '%$key%' AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval 
+				   )
+				   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   break;
+				   case 'comment':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+					   MATCH (comment) AGAINST ('".$key."' IN BOOLEAN MODE) AS comment_relevance,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   (comment LIKE '%$key%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date,comment_relevance DESC ".this_limit();
+				   break;
+				   case 'time_range':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]' 
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval 
+						   )
+						   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_loc':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND LOCATION LIKE '%$timeArray[2]%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware_door':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1]
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (WAREHOUSE LIKE '%$timeArray[0]%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_ware_door':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3]
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_ware':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware_door_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1] AND
+					   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[3]%' )
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (WAREHOUSE LIKE '%$timeArray[0]%' AND
+					   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[2]%' )
+	   
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_ware_door_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3] AND
+						   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[5]%' )
+	   
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval 
+						   )
+						   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   
+						   //die($vq);
+				   break;
+				   case 'time_range_ware_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%' AND
+						   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[4]%' )
+	   
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+						   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   default:
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
+				   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+		   WHERE (".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".$merged_query." ) 
+		   or (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' )".$interval."
+			  )ORDER BY title ".this_limit();
+				   //die($vq);
+				   break;
+					   
+				   }
+				   
+			   }
+			   else{
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+	   MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
+	   MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		   WHERE (MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval) ORDER by title_relevance DESC,relevance DESC ".this_limit();
+			   }
+			   
+			   //die($vq);
+			   
+			   //###############################
+			   
+		/* Use full search */	 
+	   /* $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+	   MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
+	   MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		   WHERE MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by title_relevance DESC,relevance DESC ".this_limit();
+		 */
+		
 		}
-		else{
-			$vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
-MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
-MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-	WHERE MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by title_relevance DESC,relevance DESC ".this_limit();
+ }else{
+	if((strlen($key) < 0) /* || (get_option("searchmode",1) == 1) */) {
+		$vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos,".DB_PREFIX."warehouses.title as warehouse_title 
+		LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+		WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+		(".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".DB_PREFIX."videos.title like '%".$key."%' or ".DB_PREFIX."videos.title like '%".$nkey."%' or ".DB_PREFIX."videos.title like '%".$mkey."%' or ".DB_PREFIX."videos.description like '%".$key."%' or ".DB_PREFIX."videos.tags like '%".$key."%' ) ".$interval."
+		)
+			  ORDER BY CASE WHEN ".DB_PREFIX."videos.title like '" .$key. "%' THEN 0
+					  WHEN ".DB_PREFIX."videos.title like '%" .$key. "%' THEN 1
+					  WHEN ".DB_PREFIX."videos.tags like '" .$key. "%' THEN 2
+					  WHEN ".DB_PREFIX."videos.tags like '%" .$key. "%' THEN 3		   
+					  WHEN ".DB_PREFIX."videos.description like '%" .$key. "%' THEN 4
+					  WHEN ".DB_PREFIX."videos.tags like '%" .$key. "%' THEN 5
+					  ELSE 6
+				 END, title ".this_limit();
+		} else {
+			
+			   //############################
+			   if(not_empty($ntype)){
+				   switch (trim($ntype)) {
+				   case 'location':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+					   MATCH (location) AGAINST ('".$key."' IN BOOLEAN MODE) AS location_relevance,".DB_PREFIX."warehouses.title as warehouse_title 
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (LOCATION LIKE '%$key%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date,location_relevance DESC ".this_limit();
+				   break;	
+				   case 'load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+					   MATCH (load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) AGAINST ('".$key."' IN BOOLEAN MODE) AS load_relevance,".DB_PREFIX."warehouses.title as warehouse_title 
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and ((CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' ) 
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date,load_relevance DESC ".this_limit();
+						   
+				   break;	
+				   case 'item':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id FROM ".DB_PREFIX."videos 
+				   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+				   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and (item LIKE '%$key%' AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval 
+				   )
+				   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   break;
+				   case 'comment':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+					   MATCH (comment) AGAINST ('".$key."' IN BOOLEAN MODE) AS comment_relevance,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and (comment LIKE '%$key%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date,comment_relevance DESC ".this_limit();
+				   break;
+				   case 'time_range':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]' 
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval 
+						   )
+						   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_loc':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND LOCATION LIKE '%$timeArray[2]%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware_door':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1]
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (WAREHOUSE LIKE '%$timeArray[0]%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_ware_door':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group']." )and 
+					   (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3]
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_ware':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%'
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware_door_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (WAREHOUSE LIKE '%$timeArray[0]%' AND DOOR = $timeArray[1] AND
+					   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[3]%' )
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'ware_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (WAREHOUSE LIKE '%$timeArray[0]%' AND
+					   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[2]%' )
+	   
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+							ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   case 'time_range_ware_door_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%' AND DOOR = $timeArray[3] AND
+						   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[5]%' )
+	   
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval 
+						   )
+						   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   
+						   //die($vq);
+				   break;
+				   case 'time_range_ware_load':
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title
+					   FROM ".DB_PREFIX."videos 
+					   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+					   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+					   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+					   (start_date_time BETWEEN '$timeArray[0]' AND '$timeArray[1]'
+						   AND WAREHOUSE LIKE '%$timeArray[2]%' AND
+						   (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$timeArray[4]%' )
+	   
+						   AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval
+						   )
+						   ORDER by ".DB_PREFIX."videos.date ".this_limit();
+				   //die($vq);
+				   break;
+				   default:
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner,".DB_PREFIX."users.group_id,".DB_PREFIX."warehouses.title as warehouse_title FROM ".DB_PREFIX."videos 
+				   LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+				   LEFT JOIN ".DB_PREFIX."warehouses ON ".DB_PREFIX."videos.warehouse = ".DB_PREFIX."warehouses.id
+		   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and 
+		   (".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() and ( ".$merged_query." ) 
+		   or (CONCAT_WS('',load_1,load_2,load_3,load_4,load_5,load_6,load_7,load_8,load_9,load_10,load_11,load_12,load_13,load_14,load_15,load_16,load_17,load_18,load_19,load_20) LIKE '%$key%' )".$interval."
+			  )ORDER BY title ".this_limit();
+				   //die($vq);
+				   break;
+					   
+				   }
+				   
+			   }
+			   else{
+				   $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+	   MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
+	   MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		   WHERE (".DB_PREFIX."videos.groupid = ".$_SESSION['group'].") and (MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval) ORDER by title_relevance DESC,relevance DESC ".this_limit();
+			   }
+			   
+			   //die($vq);
+			   
+			   //###############################
+			   
+		/* Use full search */	 
+	   /* $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
+	   MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
+	   MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
+		   WHERE MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by title_relevance DESC,relevance DESC ".this_limit();
+		 */
+		
 		}
-		
-		//die($vq);
-		
-		//###############################
-		
- /* Use full search */	 
-/* $vq = "select ".$options.", ".DB_PREFIX."users.name as owner, ".DB_PREFIX."users.group_id,
-MATCH (title,description,tags) AGAINST ('".$key."' IN BOOLEAN MODE) AS relevance,
-MATCH (title) AGAINST ('".$key."' IN BOOLEAN MODE) AS title_relevance FROM ".DB_PREFIX."videos LEFT JOIN ".DB_PREFIX."users ON ".DB_PREFIX."videos.user_id = ".DB_PREFIX."users.id 
-	WHERE MATCH (title,description,tags) AGAINST('".$key."' IN BOOLEAN MODE) AND ".DB_PREFIX."videos.pub > 0 and ".DB_PREFIX."videos.date < now() $interval ORDER by title_relevance DESC,relevance DESC ".this_limit();
-  */
- 
- }	
+ }
+ 	
 // Canonical url
 if(_get('sort')) {
 $canonical = site_url().show.url_split.str_replace(array(" "),array("-"),$key)."&sort="._get('sort'); 
