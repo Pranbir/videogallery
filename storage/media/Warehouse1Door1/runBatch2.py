@@ -11,7 +11,15 @@ import csv
 import time
 import pymysql
 global videoName
+global door1
 import subprocess
+from PIL import Image
+
+
+def rotate_img(img_path, rt_degr):
+    img = Image.open(img_path)
+    return img.rotate(rt_degr)
+
 fileList = glob.glob("*.info")
 if fileList:
     for trueFile in fileList:
@@ -34,6 +42,7 @@ if fileList:
             csv_data = csv.reader(f,delimiter='|')
             for row in csv_data:
                 cursor.execute('INSERT INTO vibe_videos(ispremium,media,token,pub,user_id,date,featured,private,source,tmp_source,title,thumb,duration,description,tags,category,views,liked,disliked,nsfw,embed,remote,srt,privacy,location,load_num,item,comment,start_date_time,end_date_time,warehouse,door,groupid) VALUES( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s)', row)
+                door1 = row[31]
                
         getLocation = "SELECT  id,location  FROM vibe_videos WHERE title = '"+videoName+".mp4' "
         #print(getLocation)
@@ -75,33 +84,48 @@ if fileList:
         # mydb.commit()
         # cursor.close()
 		
-		
-        videoList=glob.glob(videoName+"_*.mp4")
-        videoList.sort(key=os.path.getmtime)
-        text_file = open("Output.txt", "w")
+        try:
+            videoList=glob.glob(videoName+"_*.mp4")
+            videoList.sort(key=os.path.getmtime)
+        except:
+            print("no splitted videos found")
         if videoList:
+            text_file = open("Output.txt", "w")
             for vdFile in videoList:
                 print(vdFile)
                 text_file.write("file '%s'\n" % vdFile)
             text_file.close()
-
-        concatVideo='ffmpeg -y -f concat -safe 0 -i C:\\xampp\\htdocs\\videogallery\\storage\\media\\Warehouse1Door1\\Output.txt -c copy '+videoName+'.mp4'
+            concatVideo='ffmpeg -y -f concat -safe 0 -i C:\\xampp\\htdocs\\videogallery\\storage\\media\\Warehouse1Door1\\Output.txt -c copy '+videoName+'.mp4'
+            os.system(concatVideo)
 		
-        os.system(concatVideo)
 
+    
+        #print("door no "+str(door1))
+        if door1 == '1':
+            print("video Splitting started")
+            flipVideo = 'ffmpeg -y -i '+videoName+'.mp4 -vf "transpose=2,transpose=2" ' +videoName+'1.mp4'
+            os.system(flipVideo)
+            moveVideo = 'move '+videoName+'1.mp4 '+videoName+'.mp4'
+            os.system(moveVideo)
+            print("video Splitting completed")
+            print("rotating thumbnail image started")
+            img_rt_180 = rotate_img('C:\\xampp\\htdocs\\videogallery\\storage\\media\\Warehouse1Door1Thumbs\\'+videoName+'.jpg', 180)
+            img_rt_180.save('C:\\xampp\\htdocs\\videogallery\\storage\\media\\Warehouse1Door1Thumbs\\'+videoName+'.jpg')
+            print("rotating thumbnail image completed")
+        
         deletedInfoFile="del "+videoName+".info"
         deleteVideoChunks="del "+videoName+"_*.mp4"
 
         os.system(deletedInfoFile)
         os.system(deleteVideoChunks)
-        """
+        
         duration= subprocess.check_output('ffprobe -i '+videoName+'.mp4 -show_entries format=duration -v quiet -of csv="p=0"',shell=True, stderr=subprocess.STDOUT)
         duration=float(duration)
         duration=str(duration)
-        query="update vibe_videos set duration="+duration+" where title="+videoName+""
+        print(duration)
+        query="update vibe_videos set duration="+duration+" where title='"+videoName+".mp4'"
         print(query)
         cursor.execute(query)
         mydb.commit()
         cursor.close()
-        """              
                        
