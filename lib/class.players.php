@@ -110,9 +110,11 @@ return $ini.$jp;
 			playing: function() { $('div.screenAd').addClass('hide');  }
 			});
 			var cpJP  = \"#\" + $(this).find('.Player').attr('id');
+			/*
 			$(\".mediaPlayer\").bind($.jPlayer.event.ended, function() {
             startNextVideo();	
-            });
+			});
+			*/
 			" . $ads['js'] . "
 			</script>
 			<div id=\"uniquePlayer-1\" class=\"mediaPlayer darkskin \">
@@ -180,9 +182,11 @@ return $ini.$jp;
     $embed .= '  });';
      $embed .= '
 	    $(document).ready(function() {
-              jwplayer().onComplete( function(){
+			/*  
+			jwplayer().onComplete( function(){
 				 startNextVideo();				  
 				  });
+				  */
 		});		  
         ';
     
@@ -254,9 +258,11 @@ if(_contains($file, 'stream')) {
 	<script>
   $(document).ready(function() {
     fapi = flowplayer();
-    fapi.one("finish", function(){
+	/*
+	fapi.one("finish", function(){
     startNextVideo();
-    });
+	});
+	*/
   });
 	' . $ads['js'] . '
 	</script>

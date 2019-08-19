@@ -1,4 +1,5 @@
 $(window).load(function(){
+    /*
     startNextVideo = function() {
         if ($("li#playingNow").html()) {
             var nextPlay = $("li#playingNow").next();
@@ -26,7 +27,7 @@ $(window).load(function(){
 
         }
     }
-
+*/
     if ($("#suggest-results").length) {
         $(".header input[name=tag]").keyup(function() {
             var searched = $(this).val();

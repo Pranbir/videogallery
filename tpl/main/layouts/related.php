@@ -63,8 +63,8 @@ if ($result) {
 	$duration = ($related->duration > 0) ? video_time($related->duration) : '<i class="material-icons">&#xE439;</i>';
 	if(isset($related->group_id)) { $grcreative= group_creative($related->group_id); } else { $grcreative=''; };
 	$wlater = (is_user()) ? '<a class="laterit" title="'._lang("Add to watch later").'" href="javascript:Padd('.$related->vid.', '.later_playlist().')"><i class="material-icons">&#xE924;</i></a>' : '';
-    $autoplay = (isset($_SESSION['autoplayoff'])) ? '' : 'checked';
-	$goplaynext = (isset($_SESSION['autoplayoff'])) ? 'noautoplay' : 'autoplay';
+    $autoplay = (isset($_SESSION['autoplayoff'])) ? '' : '';
+	$goplaynext = (isset($_SESSION['autoplayoff'])) ? '' : '';
 	echo '
 	<li data-id="'.$related->vid.'" class="item-post '.$watchedcls.'">';
 	if(($firstseen) && (get_option('autoplay',1) ==1) && !has_list() ) {
@@ -73,7 +73,7 @@ if ($result) {
 	<strong style="line-height:45px">'._lang('Next play:').' </strong>
 	</div>
 	<div class="pull-right text-left inline-block media-middle">
-	
+	<!--
 	<a href="javascript:void(0)" class="tipS text-uppercase" data-placement="left" title="'._lang("Autoplay will start the next video automatically").'">
 	'._lang('Autoplay').' 
 	</a>
@@ -81,6 +81,7 @@ if ($result) {
 		 <input type="checkbox" name="autoplay" id="autoplayHandler" '.$autoplay.'>
 		 <label></label> 
 		 </div>
+		 -->
     </div>
 	</div>';	
 	}

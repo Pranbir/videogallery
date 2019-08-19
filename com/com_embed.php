@@ -147,11 +147,11 @@ echo _lang("Video was removed.");
 }
 echo '
 <div id=\'PL2\' class=\'plAd plBotRight hide\' style=\'font-size:16px; padding:0 8px 0\'>'._lang('Watch more great videos at').' <a  style=\'font-size:16px; padding:0 8px 0\' href=\''.site_url().'\' target=\'_blank\'> '.get_option('site-logo-text').'</a> <a class=\'plclose\' href=\'javascript:void(0)\'></a><div class="clearfix"></div></div>
-<script>
+<script>/*
 startNextVideo = function() { 
 $(".plAd").detach().appendTo(".embeddedVP").removeClass("hide");	
 
-}
+}*/
 </script>
 ';
 ?>

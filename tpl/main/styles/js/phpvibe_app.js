@@ -1361,7 +1361,7 @@ function getVideoTimeline(){
           }
       },  
       error: function(xhr,status,error){
-          alert("Error getting video timeline!");
+          alert("Error getting video timeline! error message:"+error);
       }
     });
 

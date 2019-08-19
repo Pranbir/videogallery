@@ -261,9 +261,11 @@ function removeComTags($input){
 							event.target.playVideo();
 							}
 							function onYTPlayerStateChange(event) {
-							if(event.data === 0) {					
+                            /*
+                                if(event.data === 0) {					
 							startNextVideo();	
-							}
+                            }
+                            */
 							}
 							 function onYouTubeIframeAPIReady() {
 								player = new YT.Player(\'ytplayer\', {
@@ -322,9 +324,11 @@ function removeComTags($input){
 				     player.addEvent(\'ready\', function() {		
 		             player.addEvent(\'finish\', onFinish);
 	                 });
-                    function onFinish(id) {
+                    /*
+                     function onFinish(id) {
 					startNextVideo();
                     }
+                    */
 					 </script>';					 
 					 $embedCode .= _ad('1');
                      }
